@@ -1,4 +1,4 @@
-package it.uniroma3.siw.security;
+package it.uniroma3.siw.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
