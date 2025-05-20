@@ -41,4 +41,28 @@ classDiagram
     ID
     Path
   }
+
+  class User {
+    ID
+    Nome
+    Cognome
+    Emain
+    Nascita
+  }
+
+  class Credential {
+    ID
+    Username
+    Password
+    Role
+  }
+
+  Credential  -- "1" User
+  User -- "*" Siw-Books
+  Libro -- "*" Siw-Books
+  Libro "1" -- "*" Recensione
+  Libro "*" -- "*" Autore
+  Libro "1" -- "*" Immagine
+
+
 ```
