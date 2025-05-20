@@ -1,0 +1,52 @@
+/* Imposta lo stile generale della pagina */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+}
+
+/* Stile per il bottone "Libro" */
+h1 a[href="libro"] {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 20px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+h1 a[href="libro"]:hover {
+    background-color: #0056b3;
+}
+
+/* Posizionamento del bottone "Login" in alto a destra */
+h1 a[href="login"] {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+h1 a[href="login"]:hover {
+    background-color: #1e7e34;
+}
