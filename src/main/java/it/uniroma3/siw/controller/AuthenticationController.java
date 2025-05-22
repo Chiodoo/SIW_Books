@@ -61,7 +61,7 @@ public class AuthenticationController {
 	public String index(Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication instanceof AnonymousAuthenticationToken) {
-	        return "homePage";
+	        return "index";
 		}
 		else {		
 			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -70,7 +70,7 @@ public class AuthenticationController {
 				return "admin/indexAdmin.html";
 			}
 		}
-        return "homePage";
+        return "index";
 	}
 		
     @GetMapping(value = "/success")
@@ -81,6 +81,6 @@ public class AuthenticationController {
     	if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
             return "admin/indexAdmin";
         }
-        return "homePage";
+        return "index";
     }
 }
