@@ -17,7 +17,7 @@
                 <span th:text="${#temporals.format(user.birth, 'dd/MM/yyyy')}">01/01/2000</span>
             </div>
             <div th:if="${user.imagePath}">
-                <img th:src="@{'/uploads/' + ${user.imagePath}}" width="100" alt="Foto profilo"/>
+                <img th:src="@{'/uploads/' + ${user.imagePath}}" width="30%" alt="Foto profilo"/>
             </div>
         </div>
         <div th:unless="${user}">Utente non trovato.</div>
