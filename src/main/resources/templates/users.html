@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Film</title>
+    <title>Utenti</title>
     <link rel="stylesheet" href="/style.css?version=2" />
   </head>
 
   <body>
-    <div><a href="/"><img src="/logo-siw.png" width="50%"/></a></div>
-    <h1>Utente</h1>
+    <div><a href="/"><img src="/logo-siw.png" width="10%"/></a></div>
+    <h1>Utenti</h1>
     <div th:if="${users.isEmpty()}">Non ci utenti nel sistema</div>
     <ul>
       <li th:each="user: ${users}">
