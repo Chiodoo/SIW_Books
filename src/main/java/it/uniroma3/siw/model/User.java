@@ -27,9 +27,19 @@ public class User {
     @NotNull
     private LocalDate birth;
 
+	private String imagePath;
+
     //===============================METODI===========================
 
-    public LocalDate getBirth() {
+    public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	public LocalDate getBirth() {
         return birth;
     }
 
