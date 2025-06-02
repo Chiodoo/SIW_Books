@@ -23,7 +23,7 @@
 		<a href="/"><img src="/images/logo-siw.png" width="20%" /></a>
 	</div>
 	<h1>Registrazione nuovo utente</h1>
-	<form th:action="@{/register}" method="POST">
+	<form th:action="@{/register}" method="POST" enctype="multipart/form-data">
 		<div>
 			<label>Nome</label>
 			<span><input type="text" placeholder="name" required th:field="${user.name}" /></span>
@@ -62,6 +62,10 @@
 				th:style="'color:red'">
 			</span>
 		</div>
+		<div>
+        	<label>Immagine profilo</label>
+        	<input type="file" name="profileImage" accept="image/*" />
+    	</div>
 		<div>
 			<button type="submit">Registra</button>
 		</div>
