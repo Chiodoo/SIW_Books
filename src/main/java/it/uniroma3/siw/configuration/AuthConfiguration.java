@@ -70,6 +70,10 @@ public class AuthConfiguration {
                 .deleteCookies("JSESSIONID")
                 .clearAuthentication(true)
                 .permitAll()
+            )
+            .oauth2Login(oauth2 -> oauth2
+                .loginPage("/login")
+                .defaultSuccessUrl("/success", true)
             );
 
         return httpSecurity.build();
