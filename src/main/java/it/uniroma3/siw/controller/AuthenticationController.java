@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.User;
+import it.uniroma3.siw.security.AuthorizationService;
 import it.uniroma3.siw.service.CredentialsService;
 import it.uniroma3.siw.service.UserService;
 import it.uniroma3.siw.util.FileUploadUtil;
@@ -31,6 +31,9 @@ public class AuthenticationController {
 	
 	@Autowired
 	private CredentialsService credentialsService;
+
+	@Autowired
+	private AuthorizationService authorizationService;
 	
 	@GetMapping(value = "/register") 
 	public String showRegisterForm (Model model) {
@@ -80,25 +83,18 @@ public class AuthenticationController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication instanceof AnonymousAuthenticationToken) {
 	        return "index";
-		}
-		else {		
-			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-			if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
-				return "admin/indexAdmin.html";
-			}
+		} else if(this.authorizationService.isAdmin()) {		
+			return "admin/indexAdmin.html";
 		}
         return "index";
 	}
-		
+
     @GetMapping(value = "/success")
     public String defaultAfterLogin(Model model) {
-        
-    	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-    	if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
-            return "admin/indexAdmin";
-        }
-        return "index";
+
+		if(this.authorizationService.isAdmin()) {
+			return "admin/indexAdmin";
+		}
+		return "index";
     }
 }
