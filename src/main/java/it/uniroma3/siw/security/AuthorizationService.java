@@ -1,10 +1,10 @@
 package it.uniroma3.siw.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-//import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.model.Credentials;
@@ -21,7 +21,7 @@ public class AuthorizationService {
      * Gli utenti OAuth2 non sono salvati nel DB e quindi sono trattati come utenti normali.
      */
     public boolean isAdmin() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
             return false;
