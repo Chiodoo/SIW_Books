@@ -79,6 +79,9 @@
 	</dependencies>
 
 	<build>
+
+		<finalName>SIW-Books</finalName> <!-- Nome fisso del jar-->
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
