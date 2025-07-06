@@ -34,3 +34,5 @@ build/
 
 application-secrets.properties
 /uploads/**
+deploy.sh
+*.jar
