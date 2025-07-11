@@ -19,12 +19,11 @@ public class User {
 
 	@NotBlank
 	private String name;
-	@NotBlank
+	@NotNull
 	private String surname;
 	@NotBlank
 	private String email;
 
-    @NotNull
     private LocalDate birth;
 
 	private String imagePath;
