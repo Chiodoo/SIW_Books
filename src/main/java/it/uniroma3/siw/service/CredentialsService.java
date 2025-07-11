@@ -31,10 +31,34 @@ public class CredentialsService {
         return result.orElse(null);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<Credentials> findById(Long id) {
+        return credentialsRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Credentials> findByUsername(String username) {
+        return credentialsRepository.findByUsername(username);
+    }
+
+/**
+     * Salva (o aggiorna) delle Credentials.
+     * - Se non è già presente un ruolo, imposta DEFAULT_ROLE.
+     * - Se la password non è già in BCrypt, la codifica.
+     */
     @Transactional
     public Credentials saveCredentials(Credentials credentials) {
-        credentials.setRole(Credentials.DEFAULT_ROLE);
-        credentials.setPassword(this.passwordEncoder.encode(credentials.getPassword()));
-        return this.credentialsRepository.save(credentials);
+        // 1) Ruolo
+        if (credentials.getRole() == null) {
+            credentials.setRole(Credentials.DEFAULT_ROLE);
+        }
+
+        // 2) Password: se non è già un hash BCrypt (inizia con "$2"), allora codificala
+        String pwd = credentials.getPassword();
+        if (pwd != null && !pwd.startsWith("$2")) {
+            credentials.setPassword(passwordEncoder.encode(pwd));
+        }
+
+        return credentialsRepository.save(credentials);
     }
 }

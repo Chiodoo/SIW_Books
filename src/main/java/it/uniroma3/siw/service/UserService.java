@@ -28,12 +28,16 @@ public class UserService {
         return userRepository.save(user);
     }
 
-        @Transactional
+    @Transactional
     public List<User> getAllUsers() {
         List<User> result = new ArrayList<>();
         Iterable<User> iterable = this.userRepository.findAll();
         for(User user : iterable)
             result.add(user);
         return result;
+    }
+
+    public Optional<User> getByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

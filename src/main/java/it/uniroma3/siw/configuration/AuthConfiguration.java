@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import it.uniroma3.siw.security.CustomOAuth2UserService;
+import it.uniroma3.siw.security.CustomOidcUserService;
+
 import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
 
 import javax.sql.DataSource;
@@ -23,6 +26,7 @@ public class AuthConfiguration {
 
     @Autowired
     private DataSource dataSource;
+
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth)
@@ -44,7 +48,7 @@ public class AuthConfiguration {
     }
 
     @Bean
-    protected SecurityFilterChain configure(final HttpSecurity httpSecurity) throws Exception {
+    protected SecurityFilterChain configure(final HttpSecurity httpSecurity, CustomOAuth2UserService customOAuth2UserService, CustomOidcUserService customOidcUserService) throws Exception {
         httpSecurity
             .cors(cors -> cors.disable())
             .authorizeHttpRequests(requests -> requests
@@ -72,9 +76,14 @@ public class AuthConfiguration {
                 .permitAll()
             )
             .oauth2Login(oauth2 -> oauth2
-                .loginPage("/login")
-                .defaultSuccessUrl("/success", true)
-            );
+          .loginPage("/login")
+          .userInfoEndpoint(endpoints -> endpoints
+              // per OAUTH2 puro (GitHub, Facebook…)
+              .userService(customOAuth2UserService)
+              // per OIDC (Google, Azure AD…)
+              .oidcUserService(customOidcUserService))
+          .defaultSuccessUrl("/success", true)
+        );
 
         return httpSecurity.build();
     }
