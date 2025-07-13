@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Nuovo Libro</title>
+  <link rel="stylesheet" href="/stile.css?version=3" />
+</head>
+<body>
+  <div><a href="/"><img src="/images/logo.png" width="20%"/></a></div>
+  <h1>Aggiungi un libro</h1>
+  <form th:action="@{/admin/book}" method="POST" th:object="${book}" enctype="multipart/form-data">
+    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+
+    <div>
+      <label>Titolo:</label>
+      <span><input required type="text" th:field="*{titolo}" /></span>
+      <span th:if="${#fields.hasErrors('titolo')}" th:errors="*{titolo}"></span>
+    </div>
+
+    <div>
+      <label>Anno pubblicazione:</label>
+      <span><input required type="text" th:field="*{annoPubblicazione}" /></span>
+      <span th:if="${#fields.hasErrors('annoPubblicazione')}" th:errors="*{annoPubblicazione}"></span>
+    </div>
+
+    <div>
+      <label>Edizione:</label>
+      <span><input type="text" th:field="*{edizione}" /></span>
+      <span th:if="${#fields.hasErrors('edizione')}" th:errors="*{edizione}"></span>
+    </div>
+
+    <div>
+      <label>Immagini del libro:</label>
+      <input type="file" name="bookImages" accept="image/*" multiple />
+    </div>
+
+    <div>
+      <span><button type="submit">Conferma</button></span>
+    </div>
+  </form>
+</body>
+</html>

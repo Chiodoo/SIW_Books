@@ -26,7 +26,6 @@ public class Book{
     @Column(unique = true, nullable = false)
     private String titolo;
 
-    @Min(0)
     @Max(2025)
     private Long annoPubblicazione;
 
