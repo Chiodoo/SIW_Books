@@ -16,7 +16,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-public class Libro {
+public class Book{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -120,7 +120,7 @@ public class Libro {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Libro other = (Libro) obj;
+        Book other = (Book) obj;
         if (titolo == null) {
             if (other.titolo != null)
                 return false;

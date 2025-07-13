@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Film</title>
+    <link rel="stylesheet" href="/stile.css?version=2" />
+</head>
+
+<body>
+    <div><a href="/"><img src="/images/logo.png" width="20%"></a></div>
+
+    <div th:if="${book}">
+        <h1 th:text="${movie.titolo}">Titolo film</h1>
+        <div>Anno: <span th:text="'(' + ${movie.annoPubblicazione} + ')'">2000</span></div>
+        <div>Edizione: <span th:text="'(' + ${movie.edizione} + ')'">2000</span></div>
+
+        <!-- Iterazione sulle immagini -->
+        <div>
+            <h2>Galleria Immagini</h2>
+            <div th:each="imgPath : ${book.immagini}">
+                <img th:src="@{${imgPath}}" alt="Immagine film" width="200" />
+            </div>
+        </div>
+    </div>
+
+    <div th:unless="${book}">Non esiste</div>
+</body>
+</html>
