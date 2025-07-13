@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Libri</title>
+    <link rel="stylesheet" href="/stile.css?version=2" />
+</head>
+
+<body>
+    <div><a href="/"><img src="/images/logo.png" width="20%"></a></div>
+
+    <div th:if="${book}">
+        <h1 th:text="${book.titolo}">Titolo libro</h1>
+        <div>Anno: <span th:text="${book.annoPubblicazione}">2000</span></div>
+        <div>Edizione: <span th:text="${book.edizione}">2000</span></div>
+
+        <!-- Iterazione sulle immagini -->
+        <div th:if="${book.immagini}">
+            <h2>Galleria Immagini</h2>
+            <div th:each="img : ${book.immagini}">
+                <img th:src="${img.path}" width="30%" alt="Immagine libro"/>
+            </div>
+        </div>
+    </div>
+
+    <div th:unless="${book}">Non esiste</div>
+</body>
+</html>

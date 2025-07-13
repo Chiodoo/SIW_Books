@@ -1,5 +1,7 @@
 package it.uniroma3.siw.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +20,7 @@ public class Recensione {
 
     private String titolo;
 
+    @Length(max = 50000)
     private String testo;
 
     @NotNull
@@ -26,7 +29,7 @@ public class Recensione {
     private Double voto;
 
     @ManyToOne
-    private Libro libro;       //Libro a cui appartiene la recensione
+    private Book libro;       //Libro a cui appartiene la recensione
 
     //===================================METODI=========================================
 
@@ -62,11 +65,11 @@ public class Recensione {
         this.voto = voto;
     }
 
-    public Libro getLibro() {
+    public Book getLibro() {
         return libro;
     }
 
-    public void setLibro(Libro libro) {
+    public void setLibro(Book libro) {
         this.libro = libro;
     }
 

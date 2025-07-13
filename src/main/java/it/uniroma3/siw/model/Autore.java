@@ -35,7 +35,7 @@ public class Autore {
     private String path;        //Path dell'immagine nel db
 
     @ManyToMany
-    private List<Libro> libri;
+    private List<Book> libri;
 
     //===================================METODI=========================================
 
@@ -95,11 +95,11 @@ public class Autore {
         this.path = path;
     }
 
-    public List<Libro> getLibri() {
+    public List<Book> getLibri() {
         return libri;
     }
 
-    public void setLibri(List<Libro> libri) {
+    public void setLibri(List<Book> libri) {
         this.libri = libri;
     }
 
