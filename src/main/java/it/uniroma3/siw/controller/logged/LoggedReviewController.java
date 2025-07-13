@@ -22,7 +22,7 @@ public class LoggedReviewController {
     @GetMapping("/formNewReview/{id}")
     public String formNewReview(@PathVariable("id") Long id, Model model) {
         model.addAttribute("book", this.bookService.findById(id));
-        return "admin/formNewReview";
+        return "logged/formNewReview";
     }
     
 }
