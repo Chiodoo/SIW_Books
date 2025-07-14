@@ -49,10 +49,8 @@ public class AdminBookController {
     }
 
     @PostMapping("/book")
-    public String addBook(@Valid @ModelAttribute("book") Book book,
-                        BindingResult bindingResult,
-                        @RequestParam("bookImages") List<MultipartFile> images,
-                        Model model) {
+    public String addBook(@Valid @ModelAttribute("book") Book book, BindingResult bindingResult, @RequestParam("bookImages") List<MultipartFile> images, Model model) {
+        
         if (bindingResult.hasErrors()) {
             return "admin/formNewBook";
         }

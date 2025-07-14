@@ -15,12 +15,22 @@ public class RecensioneService {
     private RecensioneRepository recensioneRepository;
 
     public void save(Recensione recensione, User user, Book book) {
+        //Ulteriore controllo per evitare che l'utente possa recensire lo stesso libro più volte
+        if (recensioneRepository.existsByUserAndBook(user, book)) {
+            throw new IllegalStateException("Hai già recensito questo libro");
+        }
+
         recensione.setUser(user);
         recensione.setBook(book);
+        user.getRecensioni().add(recensione);
         this.recensioneRepository.save(recensione);
     }
 
     public boolean hasRecensito(User user, Book book) {
         return this.recensioneRepository.existsByUserAndBook(user, book);
+    }
+
+    public Iterable<Recensione> findByBookId(Long bookId) {
+        return this.recensioneRepository.findByBookId(bookId);
     }
 }

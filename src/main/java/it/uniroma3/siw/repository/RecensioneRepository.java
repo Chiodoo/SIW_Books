@@ -18,4 +18,6 @@ public interface RecensioneRepository extends CrudRepository<Recensione,Long> {
     
     Iterable<Recensione> findByBook(Book book);
 
+    Iterable<Recensione> findByBookId(Long id);
+
 }
