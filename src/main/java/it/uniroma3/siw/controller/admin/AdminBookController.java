@@ -1,4 +1,4 @@
-package it.uniroma3.siw.controller;
+package it.uniroma3.siw.controller.admin;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,16 +43,14 @@ public class AdminBookController {
     }
 
     @GetMapping("/formNewBook")
-    public String formNewMovie(Model model) {
+    public String formNewBook(Model model) {
         model.addAttribute("book", new Book());
         return "admin/formNewBook";
     }
 
     @PostMapping("/book")
-    public String addBook(@Valid @ModelAttribute("book") Book book,
-                        BindingResult bindingResult,
-                        @RequestParam("bookImages") List<MultipartFile> images,
-                        Model model) {
+    public String addBook(@Valid @ModelAttribute("book") Book book, BindingResult bindingResult, @RequestParam("bookImages") List<MultipartFile> images, Model model) {
+        
         if (bindingResult.hasErrors()) {
             return "admin/formNewBook";
         }

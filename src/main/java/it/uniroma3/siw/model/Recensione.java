@@ -6,12 +6,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(
+  uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "book_id"})
+)
 public class Recensione {
     
     @Id
@@ -28,10 +34,24 @@ public class Recensione {
     @Max(5)
     private Double voto;
 
-    @ManyToOne
-    private Book libro;       //Libro a cui appartiene la recensione
+    @ManyToOne(optional = false)
+    @JoinColumn(name="book_id")
+    private Book book;       //Libro a cui appartiene la recensione
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name="user_id")
+    private User user;          //User a cui appartiene la recensione
+
 
     //===================================METODI=========================================
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getId() {
         return id;
@@ -65,12 +85,12 @@ public class Recensione {
         this.voto = voto;
     }
 
-    public Book getLibro() {
-        return libro;
+    public Book getBook() {
+        return book;
     }
 
-    public void setLibro(Book libro) {
-        this.libro = libro;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     @Override

@@ -16,7 +16,7 @@ public class Immagine {
     private String path;        //Path dell'immagine nel db
 
     @ManyToOne
-    private Book libro;       //Libro a cui appartiene l'immagine
+    private Book book;       //Libro a cui appartiene l'immagine
 
     public Long getId() {
         return id;
@@ -35,11 +35,11 @@ public class Immagine {
     }
 
     public Book getLibro() {
-        return libro;
+        return book;
     }
 
-    public void setLibro(Book libro) {
-        this.libro = libro;
+    public void setLibro(Book book) {
+        this.book = book;
     }
 
     @Override

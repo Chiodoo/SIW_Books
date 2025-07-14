@@ -1,0 +1,31 @@
+<!-- src/main/resources/templates/reviews.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+</head>
+<body>
+  <div th:fragment="reviewsFragment">
+    <h3>Recensioni</h3>
+
+    <div th:if="${#lists.isEmpty(reviews)}">
+      <p class="text-muted">Nessuna recensione disponibile.</p>
+    </div>
+
+    <div th:each="rec : ${reviews}" class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title" th:text="${rec.titolo}">Titolo recensione</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          Voto: <span th:text="${rec.voto}">0</span> / 5
+        </h6>
+        <p class="card-text" th:text="${rec.testo}">Testo recensione…</p>
+        <p class="card-text">
+          <small class="text-muted">
+            di <span th:text="|${rec.user.name} ${rec.user.surname}|">Autore</span>
+          </small>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

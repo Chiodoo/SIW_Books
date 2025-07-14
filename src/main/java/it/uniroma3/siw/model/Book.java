@@ -32,7 +32,7 @@ public class Book{
     @Min(0)
     private Long edizione;
 
-    @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Immagine> immagini;
     //Non basta solo il cascade MERGE, ma serve anche l'orphanRemoval=true per eliminare le immagini quando vengono eliminate dal libro
     //CascadeType.MERGE aggiorna solo le entità figlie esistenti
@@ -41,7 +41,7 @@ public class Book{
     @ManyToMany(mappedBy = "libri")
     private List<Autore> autori;
 
-    @OneToMany(mappedBy = "libro", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch= FetchType.LAZY, orphanRemoval = true)
     private List<Recensione> recensioni;
 
     //===================================METODI=========================================
