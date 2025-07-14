@@ -32,7 +32,7 @@ public class User {
 
 	private String imagePath;
 
-	@OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Recensione> recensioni;
 
     //===============================METODI===========================

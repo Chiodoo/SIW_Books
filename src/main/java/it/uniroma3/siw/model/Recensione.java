@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(
-  uniqueConstraints = @UniqueConstraint(columnNames = {"utente_id", "libro_id"})
+  uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "book_id"})
 )
 public class Recensione {
     
@@ -35,11 +35,11 @@ public class Recensione {
     private Double voto;
 
     @ManyToOne(optional = false)
-    @JoinColumn
+    @JoinColumn(name="book_id")
     private Book book;       //Libro a cui appartiene la recensione
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="libro_id")
+    @JoinColumn(name="user_id")
     private User user;          //User a cui appartiene la recensione
 
 

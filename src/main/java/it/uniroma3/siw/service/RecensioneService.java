@@ -21,6 +21,6 @@ public class RecensioneService {
     }
 
     public boolean hasRecensito(User user, Book book) {
-        return this.recensioneRepository.exiexistsByUserAndBook(user, book);
+        return this.recensioneRepository.existsByUserAndBook(user, book);
     }
 }

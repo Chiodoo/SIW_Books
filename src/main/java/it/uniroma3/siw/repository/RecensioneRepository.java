@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface RecensioneRepository extends CrudRepository<Recensione,Long> {
 
-    boolean exiexistsByUserAndBook(User user, Book book);
+    boolean existsByUserAndBook(User user, Book book);
 
     Optional<Recensione> findByUserAndBook(User user, Book book);
 
