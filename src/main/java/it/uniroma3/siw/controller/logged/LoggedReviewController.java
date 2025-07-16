@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequestMapping("/logged")
-@PreAuthorize("hasRole('DEFAULT')")
+@PreAuthorize("isAuthenticated()")
 public class LoggedReviewController {
 
     @Autowired BookService bookService;

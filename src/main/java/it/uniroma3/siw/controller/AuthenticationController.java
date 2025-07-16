@@ -1,11 +1,8 @@
-package it.uniroma3.siw.controller.common;
+package it.uniroma3.siw.controller;
 
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.User;
-import it.uniroma3.siw.security.AuthorizationService;
 import it.uniroma3.siw.service.CredentialsService;
 import it.uniroma3.siw.service.UserService;
 import it.uniroma3.siw.util.FileUploadUtil;
@@ -31,9 +27,6 @@ public class AuthenticationController {
 	
 	@Autowired
 	private CredentialsService credentialsService;
-
-	@Autowired
-	private AuthorizationService authorizationService;
 	
 	@GetMapping(value = "/register") 
 	public String showRegisterForm (Model model) {
@@ -77,24 +70,4 @@ public class AuthenticationController {
 	public String showLoginForm (Model model) {
 		return "formLogin";
 	}
-
-	@GetMapping(value = "/") 
-	public String index(Model model) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication instanceof AnonymousAuthenticationToken) {
-	        return "index";
-		} else if(this.authorizationService.isAdmin()) {		
-			return "admin/indexAdmin.html";
-		}
-        return "index";
-	}
-
-    @GetMapping(value = "/success")
-    public String defaultAfterLogin(Model model) {
-
-		if(this.authorizationService.isAdmin()) {
-			return "admin/indexAdmin";
-		}
-		return "index";
-    }
 }
