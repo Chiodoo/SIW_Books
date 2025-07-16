@@ -23,12 +23,6 @@
     </div>
 
     <div>
-      <label>Edizione:</label>
-      <span><input type="text" th:field="*{edizione}" /></span>
-      <span th:if="${#fields.hasErrors('edizione')}" th:errors="*{edizione}"></span>
-    </div>
-
-    <div>
       <label>Immagini del libro:</label>
       <input type="file" name="bookImages" accept="image/*" multiple />
     </div>
