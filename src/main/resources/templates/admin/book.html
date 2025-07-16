@@ -19,7 +19,7 @@
         <div th:if="${book.immagini}">
             <h2>Galleria Immagini</h2>
             <div th:each="img : ${book.immagini}">
-                <img th:src="${img.path}" width="30%" alt="Immagine libro"/>
+                <img th:src="'/uploads/' + ${img.path}" width="30%" alt="Immagine libro"/>
             </div>
         </div>
     </div>
