@@ -19,7 +19,6 @@
     <div th:if="${book}">
         <h1 th:text="${book.titolo}">Titolo libro</h1>
         <div>Anno: <span th:text="${book.annoPubblicazione}">2000</span></div>
-        <div>Edizione: <span th:text="${book.edizione}">2000</span></div>
 
         <!-- Iterazione sulle immagini -->
         <div th:if="${book.immagini}">

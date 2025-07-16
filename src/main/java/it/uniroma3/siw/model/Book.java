@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -28,9 +27,6 @@ public class Book{
 
     @Max(2025)
     private Long annoPubblicazione;
-
-    @Min(0)
-    private Long edizione;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Immagine> immagini;
@@ -94,20 +90,12 @@ public class Book{
         this.recensioni = recensioni;
     }
 
-    public Long getEdizione() {
-        return edizione;
-    }
-
-    public void setEdizione(Long edizione) {
-        this.edizione = edizione;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((titolo == null) ? 0 : titolo.hashCode());
-        result = prime * result + ((edizione == null) ? 0 : edizione.hashCode());
+        result = prime * result + ((annoPubblicazione == null) ? 0 : annoPubblicazione.hashCode());
         return result;
     }
 
@@ -125,10 +113,10 @@ public class Book{
                 return false;
         } else if (!titolo.equals(other.titolo))
             return false;
-        if (edizione == null) {
-            if (other.edizione != null)
+        if (annoPubblicazione == null) {
+            if (other.annoPubblicazione != null)
                 return false;
-        } else if (!edizione.equals(other.edizione))
+        } else if (!annoPubblicazione.equals(other.annoPubblicazione))
             return false;
         return true;
     }
