@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8" />
     <title>Libri</title>
-    <link rel="stylesheet" href="/stile.css?version=2" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
 </head>
 
 <body>
-    <div><a href="/"><img src="/images/logo.png" width="20%"></a></div>
+    <div>
+        <a href="/"><img src="/images/logo.png" width="20%" alt="Logo"></a>
+    </div>
 
     <div th:if="${book}">
         <h1 th:text="${book.titolo}">Titolo libro</h1>
         <div>Anno: <span th:text="${book.annoPubblicazione}">2000</span></div>
-        <div>Edizione: <span th:text="${book.edizione}">2000</span></div>
 
         <!-- Iterazione sulle immagini -->
         <div th:if="${book.immagini}">
@@ -22,6 +24,10 @@
         </div>
     </div>
 
-    <div th:unless="${book}">Non esiste</div>
+    <div th:unless="${book}">
+        <p>Libro non esistente</p>
+    </div>
+
+    <div th:insert="~{reviews :: reviewsFragment}"></div>
 </body>
 </html>
