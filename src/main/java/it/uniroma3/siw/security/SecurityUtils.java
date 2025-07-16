@@ -1,51 +1,60 @@
 package it.uniroma3.siw.security;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
+import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.User;
-import it.uniroma3.siw.service.UserService;
+import it.uniroma3.siw.service.CredentialsService;
 
 @Service
 public class SecurityUtils {
 
     @Autowired
-    private UserService userService;
+    private CredentialsService credentialsService;
 
     /**
-     * Restituisce l’entity User dell’utente autenticato, o null se non autenticato
-     * o se non esiste un record corrispondente.
+     * Restituisce il domain User dell’utente autenticato, o null
+     * se non autenticato o anonymous.
      */
     public User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (auth == null || !auth.isAuthenticated()) {
+        // 1) Non autenticato o anonimo → null
+        if (auth == null
+         || !auth.isAuthenticated()
+         || auth instanceof AnonymousAuthenticationToken) {
             return null;
         }
 
-        String email = null;
+        // 2) Determino la "usernameKey" a seconda del principal
+        String usernameKey = null;
+        Object principal = auth.getPrincipal();
 
-        if (auth instanceof OAuth2AuthenticationToken oauth2) {
-            // per utenti OAuth2 prendi l'email dagli attributi del token
-            email = oauth2.getPrincipal().getAttribute("email");
+        if (principal instanceof OAuth2AuthenticationToken oauth2) {
+            usernameKey = oauth2.getPrincipal().getAttribute("email");
         }
-        else if (auth.getPrincipal() instanceof UserDetails ud) {
-            // per utenti "classici" prendi username (di solito email)
-            email = ud.getUsername();
+        else if (principal instanceof OidcUser oidc) {
+            usernameKey = oidc.getEmail(); // o oidc.getAttribute("email")
+        }
+        else if (principal instanceof UserDetails ud) {
+            usernameKey = ud.getUsername();
         }
 
-        if (email == null) {
+        // 3) Se non ho ricavato nulla → null
+        if (usernameKey == null || usernameKey.isBlank()) {
             return null;
         }
 
-        // usa direttamente UserService per caricare l’entity User
-        Optional<User> maybeUser = userService.getByEmail(email);
-        return maybeUser.orElse(null);
+        // 4) Cerco le Credentials e ne ricavo il User associato
+        return credentialsService.findByUsername(usernameKey)
+                                 .map(Credentials::getUser)
+                                 .orElse(null);
     }
 }
