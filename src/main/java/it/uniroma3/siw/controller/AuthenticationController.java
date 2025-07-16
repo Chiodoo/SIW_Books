@@ -16,7 +16,7 @@ import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.service.CredentialsService;
 import it.uniroma3.siw.service.UserService;
-import it.uniroma3.siw.util.FileUploadUtil;
+import it.uniroma3.siw.service.storage.ImageStorageService;
 import jakarta.validation.Valid;
 
 @Controller
@@ -27,6 +27,9 @@ public class AuthenticationController {
 	
 	@Autowired
 	private CredentialsService credentialsService;
+
+	@Autowired
+	private ImageStorageService imageStorageService;
 	
 	@GetMapping(value = "/register") 
 	public String showRegisterForm (Model model) {
@@ -35,36 +38,35 @@ public class AuthenticationController {
 		return "formRegisterUser";
 	}
 
-	@PostMapping(value = { "/register" })
-	public String registerUser(@Valid @ModelAttribute("user") User user,
-							BindingResult userBindingResult,
-							@Valid @ModelAttribute("credentials") Credentials credentials,
-							BindingResult credentialsBindingResult,
-							@RequestParam("profileImage") MultipartFile profileImage,
-							Model model){
+	@PostMapping("/register")
+    public String registerUser(
+            @Valid @ModelAttribute("user") User user,
+            BindingResult userBindingResult,
+            @Valid @ModelAttribute("credentials") Credentials credentials,
+            BindingResult credentialsBindingResult,
+            @RequestParam("profileImage") MultipartFile profileImage,
+            Model model) throws IOException {
 
-		// se user e credential hanno entrambi contenuti validi, memorizza User e Credentials nel DB
-		if (!userBindingResult.hasErrors() && !credentialsBindingResult.hasErrors()) {
-			userService.saveUser(user);
-			credentials.setUser(user);
-			credentialsService.saveCredentials(credentials);
+        if (userBindingResult.hasErrors() || credentialsBindingResult.hasErrors()) {
+            return "formRegisterUser";
+        }
 
-			if (!profileImage.isEmpty()) {
-				try {
-					String filename = "user-" + user.getId() + ".jpg";
-					FileUploadUtil.saveFile("uploads/users", filename, profileImage);
-					user.setImagePath("users/" + filename);
-					userService.saveUser(user); // aggiorna con path immagine
-				} catch (IOException e) {
-					e.printStackTrace(); // oppure usa un logger
-				}
-			}
+        // 1) salvo User e Credentials
+        userService.saveUser(user);
+        credentials.setUser(user);
+        credentialsService.saveCredentials(credentials);
 
-			model.addAttribute("user", user);
-			return "registrationSuccessful";
-		}
-				return "formRegisterUser";
-	}
+        // 2) upload immagine (se presente) e aggiornamento percorso
+        if (profileImage != null && !profileImage.isEmpty()) {
+            // salviamo sotto uploads/users/{userId}/…
+            String relativePath = imageStorageService.store(profileImage, "users/" + user.getId());
+            user.setImagePath(relativePath);
+            userService.saveUser(user);
+        }
+
+        model.addAttribute("user", user);
+        return "registrationSuccessful";
+    }
 	
 	@GetMapping(value = "/login") 
 	public String showLoginForm (Model model) {
