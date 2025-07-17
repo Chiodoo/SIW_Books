@@ -6,55 +6,51 @@
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>
 <body>
-<div class="container mt-4">
-  <h2>Aggiungi Nuovo Autore</h2>
-  <form th:action="@{/authors/save}" th:object="${author}" method="post" enctype="multipart/form-data">
-    
-    <div class="mb-3">
-      <label for="nome" class="form-label">Nome</label>
-      <input type="text" th:field="*{nome}" class="form-control" id="nome" placeholder="Inserisci il nome" required>
+  <div>
+        <a href="/"><img src="/images/logo.png" width="20%" alt="Logo"></a>
     </div>
-
-    <div class="mb-3">
-      <label for="cognome" class="form-label">Cognome</label>
-      <input type="text" th:field="*{cognome}" class="form-control" id="cognome" placeholder="Inserisci il cognome" required>
-    </div>
-
-    <div class="mb-3">
-      <label for="nazionalita" class="form-label">Nazionalità</label>
-      <input type="text" th:field="*{nazionalita}" class="form-control" id="nazionalita" placeholder="Es. Italiana" required>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <label for="nascita" class="form-label">Data di Nascita</label>
-        <input type="date" th:field="*{nascita}" class="form-control" id="nascita" required>
+  <div class="container mt-4">
+    <h2>Aggiungi Nuovo Autore</h2>
+    <form th:action="@{/authors/save}" th:object="${author}" method="post" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nome</label>
+        <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Inserisci il nome" required>
       </div>
-      <div class="col">
-        <label for="morte" class="form-label">Data di Morte (facoltativa)</label>
-        <input type="date" th:field="*{morte}" class="form-control" id="morte">
+      <div class="mb-3">
+        <label for="surname" class="form-label">Cognome</label>
+        <input type="text" th:field="*{surname}" class="form-control" id="surname" placeholder="Inserisci il cognome" required>
       </div>
-    </div>
-
-    <div class="mb-3 mt-3">
-      <label for="image" class="form-label">Immagine Autore</label>
-      <input type="file" name="image" class="form-control" id="image" accept="image/*">
-    </div>
-
-    <div class="mb-3">
-      <label for="libri" class="form-label">Libri</label>
-      <select multiple th:field="*{libri}" class="form-select" id="libri" size="6">
-        <option th:each="book : ${allBooks}"
-                th:value="${book.id}"
-                th:text="${book.titolo + ' (' + book.annoPubblicazione + ')'}">
-        </option>
-      </select>
-      <div class="form-text">TienI premuto Ctrl (o Cmd su Mac) per selezionare più libri.</div>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Salva Autore</button>
-    <a th:href="@{/authors}" class="btn btn-secondary">Annulla</a>
-  </form>
-</div>
+      <div class="mb-3">
+        <label for="nationality" class="form-label">Nazionalità</label>
+        <input type="text" th:field="*{nationality}" class="form-control" id="nationality" placeholder="Es. Italiana" required>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label for="birth" class="form-label">Data di Nascita</label>
+          <input type="date" th:field="*{birth}" class="form-control" id="birth" required>
+        </div>
+        <div class="col">
+          <label for="death" class="form-label">Data di Morte (facoltativa)</label>
+          <input type="date" th:field="*{death}" class="form-control" id="death">
+        </div>
+      </div>
+      <div class="mb-3 mt-3">
+        <label for="image" class="form-label">Immagine Autore</label>
+        <input type="file" name="image" class="form-control" id="image" accept="image/*">
+      </div>
+      <div class="mb-3">
+        <label for="books" class="form-label">Libri</label>
+        <select multiple th:field="*{books}" class="form-select" id="books" size="6">
+          <option th:each="book : ${allBooks}"
+                  th:value="${book.id}"
+                  th:text="${book.titolo + ' (' + book.annoPubblicazione + ')'}">
+          </option>
+        </select>
+        <div class="form-text">Tieni premuto Ctrl (o Cmd) per selezionare più libri.</div>
+      </div>
+      <button type="submit" class="btn btn-primary">Salva Autore</button>
+      <a th:href="@{/authors}" class="btn btn-secondary">Annulla</a>
+    </form>
+  </div>
 </body>
 </html>
