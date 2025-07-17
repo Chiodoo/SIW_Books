@@ -34,8 +34,8 @@ public class Book{
     //CascadeType.MERGE aggiorna solo le entità figlie esistenti
     //orphanRemoval=true elimina le entità figlie che non sono più referenziate dal libro
 
-    @ManyToMany(mappedBy = "libri")
-    private List<Autore> autori;
+    @ManyToMany(mappedBy = "books")
+    private List<Author> authors;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch= FetchType.LAZY, orphanRemoval = true)
     private List<Recensione> recensioni;
@@ -74,12 +74,12 @@ public class Book{
         this.immagini = immagini;
     }
 
-    public List<Autore> getAutori() {
-        return autori;
+    public List<Author> getAuthors() {
+        return authors;
     }
 
-    public void setAutori(List<Autore> autori) {
-        this.autori = autori;
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
     }
 
     public List<Recensione> getRecensioni() {
