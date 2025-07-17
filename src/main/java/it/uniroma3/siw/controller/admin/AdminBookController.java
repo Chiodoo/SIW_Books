@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.model.Book;
 import it.uniroma3.siw.service.BookService;
+import it.uniroma3.siw.service.RecensioneService;
 import jakarta.validation.Valid;
 
 @Controller
@@ -28,6 +29,9 @@ public class AdminBookController {
     @Autowired
     private BookService bookService;
 
+    @Autowired
+    private RecensioneService recensioneService;
+
     @GetMapping("/books")
     public String getAllBooksAdmin(Model model) {
         model.addAttribute("books", bookService.getAllBooks());
@@ -37,6 +41,7 @@ public class AdminBookController {
     @GetMapping("/book/{id}")
     public String getBookAdmin(@PathVariable("id") Long id, Model model) {
         model.addAttribute("book", bookService.findById(id));
+        model.addAttribute("reviews", this.recensioneService.findByBookId(id));
         return "admin/book";
     }
 
