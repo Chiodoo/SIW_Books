@@ -90,6 +90,22 @@ public class Book{
         this.recensioni = recensioni;
     }
 
+    public void addAuthor(Author author) {
+        if(author != null && !this.authors.contains(author)) {
+            this.authors.add(author);
+            if(!author.getBooks().contains(this)) {
+                author.getBooks().add(this);
+            }
+        }
+    }
+
+    public void removeAuthor(Author author) {
+        if(author != null && this.authors.contains(author)) {
+            this.authors.remove(author);
+            author.getBooks().remove(this);
+        }
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

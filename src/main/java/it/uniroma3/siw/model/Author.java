@@ -103,6 +103,22 @@ public class Author {
         this.books = books;
     }
 
+    public void addBook(Book book) {
+        if (book != null && !this.books.contains(book)) {
+            this.books.add(book);
+            if (!book.getAuthors().contains(this)) {
+                book.getAuthors().add(this);
+            }
+        }
+    }
+
+    public void removeBook(Book book) {
+        if (book != null && this.books.contains(book)) {
+            this.books.remove(book);
+            book.getAuthors().remove(this);
+        }
+    }
+
         @Override
     public int hashCode() {
         final int prime = 31;
