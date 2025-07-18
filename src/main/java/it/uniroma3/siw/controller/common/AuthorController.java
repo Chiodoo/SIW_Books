@@ -3,10 +3,11 @@ package it.uniroma3.siw.controller.common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import it.uniroma3.siw.service.AutoreService;
+import it.uniroma3.siw.service.AuthorService;
+
 
 @Controller
-public class AutoreController {
+public class AuthorController {
 
-    @Autowired AutoreService autoreService;
+    @Autowired AuthorService authorService;
 }

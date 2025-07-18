@@ -11,7 +11,7 @@
     </div>
   <div class="container mt-4">
     <h2>Aggiungi Nuovo Autore</h2>
-    <form th:action="@{/authors/save}" th:object="${author}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/admin/author}" th:object="${author}" method="post" enctype="multipart/form-data">
       <div class="mb-3">
         <label for="name" class="form-label">Nome</label>
         <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Inserisci il nome" required>

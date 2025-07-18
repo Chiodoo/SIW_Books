@@ -66,7 +66,7 @@ public class LoggedReviewController {
             return "redirect:/login";
         }
 
-        Book book = this.bookService.findById(id);
+        Book book = bookService.findById(id);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("book", book);
