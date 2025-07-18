@@ -14,6 +14,13 @@
     <div th:if="${book}">
         <h1 th:text="${book.titolo}">Titolo libro</h1>
         <div>Anno: <span th:text="${book.annoPubblicazione}">2000</span></div>
+        <div th:if="${book.authors}">
+            <span>Autori: </span>
+            <span th:each="author : ${book.authors}" th:text="${author.name} + ' ' + ${author.surname} + ', '"></span>
+        </div>
+        <div th:unless="${book.authors}">
+            <p>Non ci sono autori registrati per questo libro</p>
+        </div>
 
         <!-- Iterazione sulle immagini -->
         <div th:if="${book.immagini}">

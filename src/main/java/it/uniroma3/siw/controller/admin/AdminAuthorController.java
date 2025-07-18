@@ -1,12 +1,97 @@
 package it.uniroma3.siw.controller.admin;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import it.uniroma3.siw.model.Author;
+import it.uniroma3.siw.model.Book;
+import it.uniroma3.siw.service.AuthorService;
+import it.uniroma3.siw.service.BookService;
+import it.uniroma3.siw.service.storage.ImageStorageService;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminAuthorController {
 
+    @Autowired
+    private BookService bookService;
+
+    @Autowired
+    private AuthorService authorService;
+
+    @Autowired
+    private ImageStorageService storageService;
+
+    @GetMapping("/formNewAuthor")
+    public String formNewAuthor(Model model) {
+
+        model.addAttribute("author", new Author());
+        model.addAttribute("allBooks", bookService.getAllBooks());
+
+        return "admin/formNewAuthor";
+    }
+
+    @PostMapping("/author")
+    public String saveAuthor(
+            @Valid @ModelAttribute("author") Author author,
+            BindingResult bindingResult,
+            @RequestParam(value = "books", required = false) List<Long> bookIds,
+            @RequestParam("image") MultipartFile image,
+            Model model) throws IOException {
+
+        // 1) validazione bean
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allBooks", bookService.getAllBooks());
+            return "admin/formNewAuthor";
+        }
+
+        // 2) associazione libri
+        if (bookIds != null) {
+            for (Long bookId : bookIds) {
+                Book book = bookService.findById(bookId);
+                if (book != null) {
+                    author.addBook(book);
+                }
+            }
+        }
+
+        // 3) Salvo l'autore per generare l'id
+        this.authorService.save(author);
+
+        // 4) gestione upload semplice
+        if (image != null && !image.isEmpty()) {
+            String path = this.storageService.store(image, "authors/" + author.getId());
+            author.setPath(path);
+        }
+
+        // 5) salvataggio finale dell'autore con l'immagine
+        authorService.save(author);
+
+        return "redirect:/admin/author/" + author.getId();
+    }
+
+    @GetMapping("/author/{id}")
+    public String getAuthor(@PathVariable("id") Long id, Model model) {
+        Author author = authorService.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Autore non trovato: " + id));
+        model.addAttribute("author", author);
+        return "admin/author";
+    }
+    
 }
+
