@@ -7,11 +7,12 @@
 </head>
 <body>
   <div>
-        <a href="/"><img src="/images/logo.png" width="20%" alt="Logo"></a>
-    </div>
+    <a th:href="@{/}"><img th:src="@{/images/logo.png}" width="20%" alt="Logo"></a>
+  </div>
   <div class="container mt-4">
     <h2>Aggiungi Nuovo Autore</h2>
     <form th:action="@{/admin/author}" th:object="${author}" method="post" enctype="multipart/form-data">
+      
       <div class="mb-3">
         <label for="name" class="form-label">Nome</label>
         <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Inserisci il nome" required>
@@ -38,9 +39,22 @@
         <label for="image" class="form-label">Immagine Autore</label>
         <input type="file" name="image" class="form-control" id="image" accept="image/*">
       </div>
+
+      <!-- Campo di ricerca per i libri -->
+      <div class="mb-2">
+        <input type="text"
+               id="searchBooks"
+               class="form-control"
+               placeholder="Cerca un libro...">
+      </div>
+
       <div class="mb-3">
         <label for="books" class="form-label">Libri</label>
-        <select multiple th:field="*{books}" class="form-select" id="books" size="6">
+        <select multiple
+                th:field="*{books}"
+                class="form-select"
+                id="books"
+                size="6">
           <option th:each="book : ${allBooks}"
                   th:value="${book.id}"
                   th:text="${book.titolo + ' (' + book.annoPubblicazione + ')'}">
@@ -48,9 +62,12 @@
         </select>
         <div class="form-text">Tieni premuto Ctrl (o Cmd) per selezionare più libri.</div>
       </div>
+
       <button type="submit" class="btn btn-primary">Salva Autore</button>
       <a th:href="@{/authors}" class="btn btn-secondary">Annulla</a>
     </form>
   </div>
+
+  <script th:src="@{/js/filterBooks.js}"></script>
 </body>
 </html>
