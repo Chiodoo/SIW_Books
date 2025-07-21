@@ -23,4 +23,8 @@ public class AuthorService {
         return this.authorRepository.findById(id);
     }
 
+    public Iterable<Author> getAllAuthors() {
+        return this.authorRepository.findAll();
+    }
+
 }
