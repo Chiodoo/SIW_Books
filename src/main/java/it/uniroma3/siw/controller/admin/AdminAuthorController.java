@@ -37,6 +37,13 @@ public class AdminAuthorController {
     @Autowired
     private ImageStorageService storageService;
 
+    @GetMapping("/authors")
+    public String getAuthors(Model model) {
+        model.addAttribute("authors", authorService.getAllAuthors());
+        return "admin/authors";
+    }
+    
+
     @GetMapping("/formNewAuthor")
     public String formNewAuthor(Model model) {
 
