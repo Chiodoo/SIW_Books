@@ -62,28 +62,6 @@ public class AdminAuthorController {
             return "admin/formNewAuthor";
         }
 
-        // // 2) associazione libri
-        // if (bookIds != null) {
-        //     for (Long bookId : bookIds) {
-        //         Book book = bookService.findById(bookId);
-        //         if (book != null) {
-        //             author.addBook(book);
-        //         }
-        //     }
-        // }
-
-        // // 3) Salvo l'autore per generare l'id
-        // this.authorService.save(author);
-
-        // // 4) gestione upload semplice
-        // if (image != null && !image.isEmpty()) {
-        //     String path = this.storageService.store(image, "authors/" + author.getId());
-        //     author.setPath(path);
-        // }
-
-        // // 5) salvataggio finale dell'autore con l'immagine
-        // authorService.save(author);
-
         Author savedAuthor = authorService.createAuthorWithBooksAndImage(author, bookIds, image);
 
         return "redirect:/admin/author/" + savedAuthor.getId();

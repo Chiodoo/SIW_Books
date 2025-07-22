@@ -43,21 +43,6 @@ public class BookService {
         return this.bookRepository.findAll();
     }
 
-//     public Book saveWithImages(Book book, List<MultipartFile> images) throws IOException {
-//     book = this.bookRepository.save(book);
-//     List<Immagine> imgs = new ArrayList<>();
-//     for (MultipartFile f : images) {
-//         if (!f.isEmpty()) {
-//             String p = this.imageStorageService.store(f, "books/" + book.getId());
-//             Immagine img = new Immagine();
-//             img.setPath(p);
-//             img.setLibro(book);
-//             imgs.add(img);
-//         }
-//     }
-//     book.setImmagini(imgs);
-//     return this.bookRepository.save(book);
-// }
 
     @Transactional
     public Book createBookWithAuthorsAndImages(Book book,
