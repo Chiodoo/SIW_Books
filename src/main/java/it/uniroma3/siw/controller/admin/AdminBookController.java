@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import it.uniroma3.siw.model.Author;
 import it.uniroma3.siw.model.Book;
 import it.uniroma3.siw.service.AuthorService;
 import it.uniroma3.siw.service.BookService;
@@ -65,21 +64,14 @@ public class AdminBookController {
             @RequestParam(value = "authors", required = false) List<Long> authorIds,
             Model model
     ) throws IOException {
+
         if (bindingResult.hasErrors()) {
+            model.addAttribute("allAuthors", this.authorService.getAllAuthors());
             return "admin/formNewBook";
         }
 
-        if (authorIds != null) {
-            for (Long authorId : authorIds) {
-                Author author = authorService.findById(authorId).orElse(null);
-                if (author != null) {
-                    book.addAuthor(author);
-                }
-            }
-        }
-
-        // Usa il service che gestisce salvataggio del book e delle immagini
-        Book savedBook = bookService.saveWithImages(book, images);
+        // Usa il service che gestisce salvataggio del book, delle immagini e dei relativi autori
+        Book savedBook = this.bookService.createBookWithAuthorsAndImages(book, authorIds, images);
 
         return "redirect:/admin/book/" + savedBook.getId();
     }
