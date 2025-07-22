@@ -34,6 +34,9 @@ public class Author {
 
     private String path;        //Path dell'immagine nel db
 
+    /*
+     * Dato che non ci sta mappedBy questo è la owning entity e se la salvo salva a cascata i book.
+     */
     @ManyToMany
     private List<Book> books;
 

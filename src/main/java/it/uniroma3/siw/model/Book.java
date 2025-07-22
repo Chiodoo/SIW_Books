@@ -34,6 +34,10 @@ public class Book{
     //CascadeType.MERGE aggiorna solo le entità figlie esistenti
     //orphanRemoval=true elimina le entità figlie che non sono più referenziate dal libro
 
+
+    /*
+     * Dato che ci sta mappedBy questo è la owning entity e se la salvo non salva a cascata gli author.
+     */
     @ManyToMany(mappedBy = "books")
     private List<Author> authors;
 

@@ -78,8 +78,6 @@ public class AdminBookController {
             }
         }
 
-
-
         // Usa il service che gestisce salvataggio del book e delle immagini
         Book savedBook = bookService.saveWithImages(book, images);
 
