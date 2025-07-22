@@ -1,9 +1,11 @@
 package it.uniroma3.siw.model;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,8 +36,8 @@ public class Author {
 
     private String path;        //Path dell'immagine nel db
 
-    @ManyToMany
-    private List<Book> books;
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    private Set<Book> books = new HashSet<>();
 
     //===================================METODI=========================================
 
@@ -95,11 +97,11 @@ public class Author {
         this.path = path;
     }
 
-    public List<Book> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
 

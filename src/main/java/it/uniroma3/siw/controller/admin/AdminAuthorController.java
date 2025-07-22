@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.model.Author;
-import it.uniroma3.siw.model.Book;
 import it.uniroma3.siw.service.AuthorService;
 import it.uniroma3.siw.service.BookService;
-import it.uniroma3.siw.service.storage.ImageStorageService;
 import jakarta.validation.Valid;
 
 @Controller
@@ -33,9 +31,6 @@ public class AdminAuthorController {
 
     @Autowired
     private AuthorService authorService;
-
-    @Autowired
-    private ImageStorageService storageService;
 
     @GetMapping("/authors")
     public String getAuthors(Model model) {
@@ -67,29 +62,9 @@ public class AdminAuthorController {
             return "admin/formNewAuthor";
         }
 
-        // 2) associazione libri
-        if (bookIds != null) {
-            for (Long bookId : bookIds) {
-                Book book = bookService.findById(bookId);
-                if (book != null) {
-                    author.addBook(book);
-                }
-            }
-        }
+        Author savedAuthor = authorService.createAuthorWithBooksAndImage(author, bookIds, image);
 
-        // 3) Salvo l'autore per generare l'id
-        this.authorService.save(author);
-
-        // 4) gestione upload semplice
-        if (image != null && !image.isEmpty()) {
-            String path = this.storageService.store(image, "authors/" + author.getId());
-            author.setPath(path);
-        }
-
-        // 5) salvataggio finale dell'autore con l'immagine
-        authorService.save(author);
-
-        return "redirect:/admin/author/" + author.getId();
+        return "redirect:/admin/author/" + savedAuthor.getId();
     }
 
     @GetMapping("/author/{id}")
