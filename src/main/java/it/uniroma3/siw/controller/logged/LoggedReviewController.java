@@ -80,6 +80,7 @@ public class LoggedReviewController {
 
         // Crea e salva la recensione associandola all'utente e al libro
         Recensione review = new Recensione();
+        review.setTitolo(formReview.getTitolo());
         review.setTesto(formReview.getTesto());
         review.setVoto(formReview.getVoto());
         this.recensioneService.save(review, user, book);
