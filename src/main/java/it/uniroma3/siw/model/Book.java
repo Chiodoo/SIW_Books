@@ -1,6 +1,8 @@
 package it.uniroma3.siw.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,6 +11,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Max;
@@ -34,8 +38,11 @@ public class Book{
     //CascadeType.MERGE aggiorna solo le entità figlie esistenti
     //orphanRemoval=true elimina le entità figlie che non sono più referenziate dal libro
 
-    @ManyToMany(mappedBy = "books")
-    private List<Author> authors;
+
+    @ManyToMany( cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+    @JoinTable(name = "book_author",joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private Set<Author> authors = new HashSet<>();
+
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch= FetchType.LAZY, orphanRemoval = true)
     private List<Recensione> recensioni;
@@ -74,11 +81,11 @@ public class Book{
         this.immagini = immagini;
     }
 
-    public List<Author> getAuthors() {
+    public Set<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<Author> authors) {
+    public void setAuthors(Set<Author> authors) {
         this.authors = authors;
     }
 

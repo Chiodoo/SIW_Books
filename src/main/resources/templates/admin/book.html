@@ -22,6 +22,14 @@
                 <img th:src="'/uploads/' + ${img.path}" width="30%" alt="Immagine libro"/>
             </div>
         </div>
+
+        <div th:if="${book.authors}">
+            <h2>Autori</h2>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="author : ${book.authors}">
+                    <a th:href="@{'/admin/author/' + ${author.id}}" th:text="${author.name + ' ' + author.surname}">Nome Cognome</a>
+                </li>
+            </ul>
     </div>
 
     <div th:unless="${book}">
