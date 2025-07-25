@@ -15,30 +15,28 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import it.uniroma3.siw.security.CustomOAuth2UserService;
 import it.uniroma3.siw.security.CustomOidcUserService;
+import it.uniroma3.siw.security.CustomUserDetailsService;
 
 import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
 
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 public class AuthConfiguration {
 
     @Autowired
-    private DataSource dataSource;
+    private CustomUserDetailsService userDetailsService;
 
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .authoritiesByUsernameQuery("SELECT username, role from credentials WHERE username=?")
-                .usersByUsernameQuery("SELECT username, password, 1 as enabled FROM credentials WHERE username=?");
-    }
+@Autowired
+public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    auth
+      .userDetailsService(userDetailsService)
+      .passwordEncoder(passwordEncoder());
+}
     
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
