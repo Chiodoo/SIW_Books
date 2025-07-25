@@ -3,6 +3,9 @@ package it.uniroma3.siw.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +22,23 @@ public class CredentialsService {
     @Autowired
     protected CredentialsRepository credentialsRepository;
 
-    // ORA delegano tutti a findById / findByUsername, evitando duplicazione
+    // ————————— Lookup con cache —————————
+
+    @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "credenzialiByUsername", key = "#username")
+    public Optional<Credentials> findByUsername(String username) {
+        return credentialsRepository.findByUsername(username);
+    }
+
+    @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "credenzialiById", key = "#userId")
+    public Optional<Credentials> findByUserId(Long userId) {
+        return credentialsRepository.findByUserId(userId);
+    }
 
     @Transactional
     public Credentials getCredentials(Long id) {
-        return findById(id).orElse(null);
+        return findByUserId(id).orElse(null);
     }
 
     @Transactional
@@ -31,39 +46,41 @@ public class CredentialsService {
         return findByUsername(username).orElse(null);
     }
 
-    @Transactional(readOnly = true)
-    public Optional<Credentials> findById(Long id) {
-        return credentialsRepository.findById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Credentials> findByUsername(String username) {
-        return credentialsRepository.findByUsername(username);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Credentials> findByUserId(Long userId) {
-        return credentialsRepository.findByUserId(userId);
-    }
+    // ————————— Creazione / salvataggio —————————
 
     /**
-     * Salva (o aggiorna) delle Credentials.
-     * - Se non è già presente un ruolo, imposta DEFAULT_ROLE.
-     * - Se la password non è già in BCrypt, la codifica.
+     * Salva (o crea) delle Credentials. Se manca il ruolo, imposta DEFAULT_ROLE;
+     * se la password non è ancora in hash BCrypt, la codifica.
+     *
+     * NOTA: questo metodo NON invalida/aggiorna la cache,
+     * perché di norma per la creazione ex-novo va bene che venga popolata
+     * al primo lookup.
      */
     @Transactional
     public Credentials saveCredentials(Credentials credentials) {
-        // 1) Ruolo
         if (credentials.getRole() == null) {
             credentials.setRole(Credentials.DEFAULT_ROLE);
         }
-
-        // 2) Password: se non è già un hash BCrypt (inizia con "$2"), allora codificala
         String pwd = credentials.getPassword();
         if (pwd != null && !pwd.startsWith("$2")) {
             credentials.setPassword(passwordEncoder.encode(pwd));
         }
-
         return credentialsRepository.save(credentials);
+    }
+
+    // ————————— Aggiornamento —————————
+
+    /**
+     * Aggiorna delle Credentials già esistenti e
+     * INVALIDA le entry di cache sia per username sia per userId,
+     * in modo che i next lookup vedano subito i valori aggiornati.
+     */
+    @Transactional
+    @Caching(evict = {
+        @CacheEvict(cacheNames = "credenzialiByUsername", key = "#credentials.username"),
+        @CacheEvict(cacheNames = "credenzialiById",      key = "#credentials.user.id")
+    })
+    public Credentials updateCredential(Credentials credentials) {
+        return saveCredentials(credentials);
     }
 }
