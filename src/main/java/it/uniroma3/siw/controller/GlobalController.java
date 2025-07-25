@@ -19,12 +19,12 @@ public class GlobalController {
             Object principal = authentication.getPrincipal();
 
             if (principal instanceof UserDetails userDetails) {
-                return new CurrentUserDTO(userDetails.getUsername()); // puoi recuperare isAdmin dal DB
+                return new CurrentUserDTO(userDetails.getUsername(),false); // puoi recuperare isAdmin dal DB
             }
 
             if (principal instanceof DefaultOAuth2User oauthUser) {
                 String username = extractUsername(oauthUser);
-                return new CurrentUserDTO(username);
+                return new CurrentUserDTO(username,true);
             }
         }
 

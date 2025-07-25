@@ -25,7 +25,8 @@
                   </form>
                 </li>
                 <li th:if="${userDetails}">
-                    <span class="dropdown-item" th:text="${userDetails.username}"></span>
+                    <a class="dropdown-item" th:href="@{/logged/account}" 
+                      th:text="${userDetails.username}"></a>
                 </li>
             </ul>
     </ul>
