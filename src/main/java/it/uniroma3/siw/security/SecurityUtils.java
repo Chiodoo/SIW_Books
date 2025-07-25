@@ -1,6 +1,7 @@
 package it.uniroma3.siw.security;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -40,19 +41,14 @@ public class SecurityUtils {
 
         // 2a) Flusso OAuth2 (compresi GitHub, Google, ecc.)
         if (auth instanceof OAuth2AuthenticationToken oauth2) {
-            // estraggo gli attributi del token
             Map<String,Object> attrs = oauth2.getPrincipal().getAttributes();
-
-            // 1° tentativo: email
             String emailAttr = (String) attrs.get("email");
             if (StringUtils.hasText(emailAttr)) {
                 usernameKey = emailAttr;
             }
-            // 2° tentativo (GitHub): login
             else if (attrs.get("login") instanceof String loginAttr) {
                 usernameKey = loginAttr;
             }
-            // fallback generico: userNameAttribute (es. id, sub, ecc.)
             else {
                 usernameKey = oauth2.getName();
             }
@@ -66,15 +62,26 @@ public class SecurityUtils {
             usernameKey = ud.getUsername();
         }
 
-        // 3) Se non ho ricavato nulla → null
         if (!StringUtils.hasText(usernameKey)) {
             return null;
         }
 
-        // 4) Cerco le Credentials e ne ricavo il User associato
         return credentialsService
                    .findByUsername(usernameKey)
                    .map(Credentials::getUser)
                    .orElse(null);
+    }
+
+    /**
+     * Restituisce le Credentials associate all’utente corrente,
+     * o null se non esistono o se non è autenticato.
+     */
+    public Credentials getCurrentCredentials() {
+        User user = getCurrentUser();
+        if (user == null || user.getId() == null) {
+            return null;
+        }
+        Optional<Credentials> credOpt = credentialsService.findByUserId(user.getId());
+        return credOpt.orElse(null);
     }
 }

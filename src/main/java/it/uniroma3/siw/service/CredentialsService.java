@@ -19,16 +19,16 @@ public class CredentialsService {
     @Autowired
     protected CredentialsRepository credentialsRepository;
 
+    // ORA delegano tutti a findById / findByUsername, evitando duplicazione
+
     @Transactional
     public Credentials getCredentials(Long id) {
-        Optional<Credentials> result = this.credentialsRepository.findById(id);
-        return result.orElse(null);
+        return findById(id).orElse(null);
     }
 
     @Transactional
     public Credentials getCredentials(String username) {
-        Optional<Credentials> result = this.credentialsRepository.findByUsername(username);
-        return result.orElse(null);
+        return findByUsername(username).orElse(null);
     }
 
     @Transactional(readOnly = true)
@@ -41,7 +41,12 @@ public class CredentialsService {
         return credentialsRepository.findByUsername(username);
     }
 
-/**
+    @Transactional(readOnly = true)
+    public Optional<Credentials> findByUserId(Long userId) {
+        return credentialsRepository.findByUserId(userId);
+    }
+
+    /**
      * Salva (o aggiorna) delle Credentials.
      * - Se non è già presente un ruolo, imposta DEFAULT_ROLE.
      * - Se la password non è già in BCrypt, la codifica.
