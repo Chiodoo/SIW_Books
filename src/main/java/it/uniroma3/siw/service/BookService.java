@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import it.uniroma3.siw.service.storage.ImageStorageService;
 
@@ -80,4 +82,22 @@ public class BookService {
         return bookRepository.save(book);
     }
 
+    @SuppressWarnings("null")
+    public List<Book> search(String query, Integer anno) {
+        boolean hasQ   = (query   != null && !query.isBlank());
+        boolean hasAnno= (anno!= null);
+        if (hasQ && hasAnno) {
+            return bookRepository.findByTitoloContainingIgnoreCaseAndAnnoPubblicazione(query.trim(), anno);
+        }
+        if (hasQ) {
+            return bookRepository.findByTitoloContainingIgnoreCase(query.trim());
+        }
+        if (hasAnno) {
+            return bookRepository.findByAnnoPubblicazione(anno);
+        }
+        // nessun filtro: tutti i libri
+        return StreamSupport
+                 .stream(bookRepository.findAll().spliterator(), false)
+                 .collect(Collectors.toList());
+    }
 }

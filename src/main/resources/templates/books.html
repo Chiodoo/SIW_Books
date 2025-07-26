@@ -1,18 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
+    <meta charset="UTF-8" />
     <title>Libri</title>
     <link rel="stylesheet" href="/style.css?version=2" />
   </head>
 
   <body>
-    <div><a href="/"><img src="/images/logo.png" width="30%"/></a></div>
+    <div>
+      <a th:href="@{/}">
+        <img src="/images/logo.png" width="30%" alt="Logo" />
+      </a>
+    </div>
+
     <h1>Libri</h1>
-    <div th:if="${books.isEmpty()}">Non ci sono libri nel sistema</div>
+
+    <!-- Form di ricerca per titolo e anno -->
+    <form method="get" th:action="@{/books/search}" class="search-form">
+      <input
+        type="text"
+        name="q"
+        placeholder="Titolo…"
+        th:value="${q}"
+      />
+      <input
+        type="number"
+        name="anno"
+        min="0"
+        max="2025"
+        placeholder="Anno…"
+        th:value="${anno}"
+      />
+      <button type="submit">🔍 Cerca</button>
+    </form>
+
+    <!-- Pulsante Annulla ricerca, visibile solo se q o anno sono valorizzati -->
+    <div th:if="${q != null or anno != null}" class="cancel-search">
+      <a th:href="@{/books}" class="button">Annulla ricerca</a>
+    </div>
+
+    <!-- Conteggio risultati -->
+    <div th:if="${count != null}">
+      <p>Risultati trovati: <strong th:text="${count}"></strong></p>
+    </div>
+
+    <!-- Messaggio di nessun risultato per i filtri -->
+    <div th:if="${message != null}" class="info" th:text="${message}"></div>
+
+    <!-- Se non è ricerca e la lista è vuota -->
+    <div th:if="${books.isEmpty()} and ${count == null}">
+      Non ci sono libri nel sistema
+    </div>
+
+    <!-- Lista dei libri -->
     <ul>
-      <li th:each="book: ${books}">
-        <a th:href="@{'/book' + '/' + ${book.id}}" th:text="${book.titolo} + ' (' + ${book.annoPubblicazione} + ')'"></a>
-        <a th:href="@{'/logged/formNewReview' + '/' + ${book.id}}">Lascia una recensione!</a>
+      <li th:each="book : ${books}">
+        <a
+          th:href="@{'/book/' + ${book.id}}"
+          th:text="${book.titolo} + ' (' + ${book.annoPubblicazione} + ')'"
+        ></a>
+        &nbsp;|&nbsp;
+        <a
+          th:href="@{'/logged/formNewReview/' + ${book.id}}"
+          >Lascia una recensione!</a
+        >
       </li>
     </ul>
   </body>
