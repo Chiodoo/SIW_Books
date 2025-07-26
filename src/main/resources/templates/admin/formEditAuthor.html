@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'Modifica Autore – ' + ${author.name} + ' ' + ${author.surname}">Modifica Autore</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+  <div>
+    <a th:href="@{/}"><img th:src="@{/images/logo.png}" width="20%" alt="Logo"></a>
+  </div>
+  <div class="container mt-4">
+    <h2 class="mt-3">Modifica Autore</h2>
+
+    <form th:action="@{/admin/author/{id}(id=${author.id})}"
+          th:object="${author}"
+          method="post"
+          enctype="multipart/form-data">
+
+      <!-- override HTTP method per PUT -->
+      <input type="hidden" name="_method" value="put"/>
+      <!-- CSRF token -->
+      <input type="hidden" th:name="${_csrf.parameterName}"
+             th:value="${_csrf.token}" />
+
+      <!-- error globali -->
+      <p th:each="err : ${#fields.globalErrors()}"
+         th:text="${err}" class="text-danger"></p>
+
+      <div class="row">
+        <div class="col">
+          <label for="name" class="form-label">Nome</label>
+          <input type="text" th:field="*{name}" class="form-control" id="name"
+                 placeholder="Inserisci il nome" required>
+          <div th:if="${#fields.hasErrors('name')}"
+               th:errors="*{name}" class="text-danger"></div>
+        </div>
+        <div class="col">
+          <label for="surname" class="form-label">Cognome</label>
+          <input type="text" th:field="*{surname}" class="form-control" id="surname"
+                 placeholder="Inserisci il cognome" required>
+          <div th:if="${#fields.hasErrors('surname')}"
+               th:errors="*{surname}" class="text-danger"></div>
+        </div>
+      </div>
+
+      <div class="mb-3 mt-3">
+        <label for="nationality" class="form-label">Nazionalità</label>
+        <input type="text" th:field="*{nationality}" class="form-control" id="nationality"
+               placeholder="Es. Italiana" required>
+        <div th:if="${#fields.hasErrors('nationality')}"
+             th:errors="*{nationality}" class="text-danger"></div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label for="birth" class="form-label">Data di Nascita</label>
+          <input type="date" th:field="*{birth}" class="form-control" id="birth" required>
+          <div th:if="${#fields.hasErrors('birth')}"
+               th:errors="*{birth}" class="text-danger"></div>
+        </div>
+        <div class="col">
+          <label for="death" class="form-label">Data di Morte (facoltativa)</label>
+          <input type="date" th:field="*{death}" class="form-control" id="death">
+          <div th:if="${#fields.hasErrors('death')}"
+               th:errors="*{death}" class="text-danger"></div>
+        </div>
+      </div>
+
+      <!-- Preview dell'immagine corrente -->
+      <div class="mb-3 mt-4" th:if="${author.image}">
+        <label class="form-label">Immagine corrente:</label>
+        <div>
+          <img th:src="@{/uploads/{f}(f=${author.image.path})}"
+               class="img-fluid rounded" alt="Immagine Autore" style="max-height:200px;">
+        </div>
+      </div>
+
+      <!-- Carica nuova immagine (sostituirà quella esistente) -->
+      <div class="mb-3">
+        <label for="image" class="form-label">Sostituisci immagine Autore</label>
+        <input type="file" name="authorImage" class="form-control" id="image" accept="image/*">
+        <!-- validazione sul file ora gestita in controller/service -->
+      </div>
+
+      <!-- Campo di ricerca e selezione dei libri -->
+      <div class="mb-3">
+        <label class="form-label">Libri associati:</label>
+        <input type="text"
+               class="form-control mb-2 list-filter"
+               placeholder="Cerca un libro..."
+               data-target="books"/>
+        <select multiple
+                id="books"
+                class="form-select"
+                size="6"
+                th:field="*{books}">
+          <option th:each="book : ${allBooks}"
+                  th:value="${book.id}"
+                  th:text="${book.titolo + ' (' + book.annoPubblicazione + ')'}">
+          </option>
+        </select>
+        <div class="form-text">Ctrl/Cmd + click per selezione multipla.</div>
+        <div th:if="${#fields.hasErrors('books')}"
+             th:errors="*{books}" class="text-danger"></div>
+      </div>
+
+      <button type="submit" class="btn btn-success">
+        <i class="bi bi-save"></i> Salva modifiche
+      </button>
+      <a th:href="@{/author/{id}(id=${author.id})}" class="btn btn-secondary">
+        Annulla
+      </a>
+    </form>
+  </div>
+
+  <script th:src="@{/js/filterList.js}"></script>
+</body>
+</html>

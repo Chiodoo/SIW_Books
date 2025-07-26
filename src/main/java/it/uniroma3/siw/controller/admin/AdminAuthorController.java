@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.uniroma3.siw.model.Author;
 import it.uniroma3.siw.service.AuthorService;
 import it.uniroma3.siw.service.BookService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @Controller
@@ -72,6 +74,33 @@ public class AdminAuthorController {
             ra.addFlashAttribute("error", "Autore non trovato, impossibile eliminare.");
         }
         return "redirect:/authors";
+    }
+
+    @GetMapping("/editAuthor/{id}")
+    public String formEditAuthor(@PathVariable Long id, Model model) {
+        Author author = authorService.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Autore non trovato: " + id));
+        model.addAttribute("author", author);
+        model.addAttribute("allBooks", bookService.getAllBooks());
+        return "admin/formEditAuthor";
+    }
+
+    @PutMapping("/author/{id}")
+    public String updateAuthor(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("author") Author authorForm,
+            BindingResult bindingResult,
+            @RequestParam(value = "books", required = false) List<Long> bookIds,
+            @RequestParam("authorImage") MultipartFile authorImage,
+            Model model) throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allBooks", bookService.getAllBooks());
+            return "admin/formEditAuthor";
+        }
+
+        Author updated = authorService.updateAuthor(id, authorForm, bookIds, authorImage);
+        return "redirect:/author/" + updated.getId();
     }
 }
 
