@@ -62,4 +62,16 @@ public class AuthorService {
         return author;
     }
 
+    public List<Author> searchAuthors(String query) {
+        // se query è null/empty, restituisco tutti
+        if (query == null || query.isBlank()) {
+            return (List<Author>) this.getAllAuthors();
+        }
+        return authorRepository.findByNameContainingIgnoreCaseOrSurnameContainingIgnoreCase(query, query);
+    }
+
+    public long countAuthors() {
+        return authorRepository.count();
+    }
+
 }
