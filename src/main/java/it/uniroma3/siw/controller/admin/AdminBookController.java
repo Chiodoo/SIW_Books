@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import it.uniroma3.siw.model.Book;
 import it.uniroma3.siw.service.AuthorService;
 import it.uniroma3.siw.service.BookService;
-import it.uniroma3.siw.service.RecensioneService;
 import jakarta.validation.Valid;
 
 @Controller
@@ -31,23 +29,7 @@ public class AdminBookController {
     private BookService bookService;
 
     @Autowired
-    private RecensioneService recensioneService;
-
-    @Autowired
     private AuthorService authorService;
-
-    @GetMapping("/books")
-    public String getAllBooksAdmin(Model model) {
-        model.addAttribute("books", bookService.getAllBooks());
-        return "admin/books";
-    }
-
-    @GetMapping("/book/{id}")
-    public String getBookAdmin(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("book", bookService.findById(id));
-        model.addAttribute("reviews", this.recensioneService.findByBookId(id));
-        return "admin/book";
-    }
 
     @GetMapping("/formNewBook")
     public String formNewBook(Model model) {
@@ -73,6 +55,6 @@ public class AdminBookController {
         // Usa il service che gestisce salvataggio del book, delle immagini e dei relativi autori
         Book savedBook = this.bookService.createBookWithAuthorsAndImages(book, authorIds, images);
 
-        return "redirect:/admin/book/" + savedBook.getId();
+        return "redirect:/book/" + savedBook.getId();
     }
 }

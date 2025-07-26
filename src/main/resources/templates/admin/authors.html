@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <title>Autori</title>
+    <title>Autori - Admin</title>
     <link rel="stylesheet" href="/style.css?version=2" />
   </head>
 
@@ -20,7 +20,7 @@
     <!-- Lista autori -->
     <ul>
       <li th:each="author : ${authors}">
-        <a th:href="@{'/admin/author/' + ${author.id}}"
+        <a th:href="@{'/author/' + ${author.id}}"
            th:text="${author.name} + ' ' + ${author.surname}">
           Nome Cognome
         </a>
