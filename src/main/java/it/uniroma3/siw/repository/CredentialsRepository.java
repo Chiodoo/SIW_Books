@@ -17,4 +17,6 @@ public interface CredentialsRepository extends CrudRepository<Credentials, Long>
     // Stessa logica: carica l'entità "user" insieme alle credenziali trovate tramite l'id dell'utente.
     @EntityGraph(attributePaths = "user")
     public Optional<Credentials> findByUserId(Long userId);
+
+    public void deleteByUser_Id(Long userId);
 }
