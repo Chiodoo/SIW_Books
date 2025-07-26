@@ -8,12 +8,37 @@
 
   <body>
     <div>
-      <a href="/"><img src="/images/logo.png" width="30%" /></a>
+      <a href="/"><img src="/images/logo.png" width="30%" alt="Logo" /></a>
     </div>
+
     <h1>Autori</h1>
 
-    <!-- Messaggio se non ci sono autori -->
-    <div th:if="${authors.isEmpty()}">
+    <!-- Form di ricerca per nome o cognome -->
+    <form method="get" th:action="@{/authors/search}" class="search-form">
+      <input
+        type="text"
+        name="q"
+        placeholder="Nome o Cognome…"
+        th:value="${q}"
+      />
+      <button type="submit">🔍 Cerca</button>
+    </form>
+
+    <!-- Pulsante Annulla ricerca -->
+    <div th:if="${q != null and q != ''}" class="cancel-search">
+      <a th:href="@{/authors}" class="button">Annulla ricerca</a>
+    </div>
+
+    <!-- Conteggio risultati -->
+    <div th:if="${count != null}">
+      <p>Risultati trovati: <strong th:text="${count}"></strong></p>
+    </div>
+
+    <!-- Messaggio di nessun risultato -->
+    <div th:if="${message != null}" class="info" th:text="${message}"></div>
+
+    <!-- Se non è ricerca e la lista è vuota -->
+    <div th:if="${authors.isEmpty()} and ${count == null}">
       Non ci sono autori nel sistema
     </div>
 
