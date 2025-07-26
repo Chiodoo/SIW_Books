@@ -1,67 +1,79 @@
 package it.uniroma3.siw.service.storage;
 
 import it.uniroma3.siw.configuration.UploadProperties;
+import it.uniroma3.siw.service.storage.exception.FileTooLargeException;
+import it.uniroma3.siw.service.storage.exception.UnsupportedFileTypeException;
+import org.apache.tika.Tika;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class ImageStorageService {
 
+    private static final long MAX_SIZE = 30 * 1_048_576; // 30 MB
+    // aggiunto image/webp
+    private static final List<String> ALLOWED_MIME = List.of(
+        "image/png",
+        "image/jpeg",
+        "image/webp"
+    );
+
     private final Path baseDir;
+    private final Tika tika;
 
     public ImageStorageService(UploadProperties props) {
         this.baseDir = Paths.get(props.getBaseDir());
+        this.tika = new Tika();
     }
 
     /**
-     * Salva un file immagine all’interno di una sottocartella della directory base,
-     * generando un nome univoco con UUID per evitare collisioni o problemi derivanti
-     * dal nome originale (che può contenere caratteri non sicuri o addirittura essere null).
-     * 
-     * @param file   il {@link MultipartFile} da salvare (può essere null o vuoto)
-     * @param subdir il nome della sottocartella sotto baseDir (es. "users/42" o "books/7")
-     * @return il path relativo al file salvato, pronto per essere usato come src (es. "users/42/a0f5c3d2-8b79-4e1d-9a87-2cc3fae5b6f4.jpg"),
-     *         oppure null se il file era null o vuoto
-     * @throws IOException se si verifica un errore di I/O durante la scrittura
+     * Valida e salva l’immagine, restituendo il path relativo.
      */
     public String store(MultipartFile file, String subdir) throws IOException {
-        if (file == null || file.isEmpty()) {
-            return null;
+        if (file == null || file.isEmpty()) return null;
+
+        // 1) dimensione
+        if (file.getSize() > MAX_SIZE) {
+            throw new FileTooLargeException(MAX_SIZE);
         }
 
-        // Estrazione sicura del nome originale (può essere null)
-        String orig = file.getOriginalFilename();
-        // Usa stringa vuota se orig è null
-        String safeOrig = (orig != null ? orig : "");
-
-        // Ricava l’estensione, se presente
-        String ext = "";
-        int dotIndex = safeOrig.lastIndexOf('.');
-        if (dotIndex > 0 && dotIndex < safeOrig.length() - 1) {
-            ext = safeOrig.substring(dotIndex); // include il “.”
+        // 2) tipo MIME reale
+        String realMime;
+        try (InputStream is = file.getInputStream()) {
+            realMime = tika.detect(is);
+        }
+        if (!ALLOWED_MIME.contains(realMime)) {
+            throw new UnsupportedFileTypeException(realMime);
         }
 
-        // Genera un nome univoco
+        // 3) genera filename con estensione basata sul MIME
+        String ext;
+        switch (realMime) {
+            case "image/png":  ext = ".png";  break;
+            case "image/jpeg": ext = ".jpg";  break;
+            case "image/webp": ext = ".webp"; break;
+            default:           ext = "";      break; // non dovrebbe capitare
+        }
         String filename = UUID.randomUUID().toString() + ext;
 
-        // Crea la directory target se manca
+        // 4) crea directory se non esiste
         Path targetDir = baseDir.resolve(subdir);
         if (Files.notExists(targetDir)) {
             Files.createDirectories(targetDir);
         }
 
-        // Salva il file
+        // 5) salva il file
         try (InputStream in = file.getInputStream()) {
             Path targetFile = targetDir.resolve(filename);
             Files.copy(in, targetFile, StandardCopyOption.REPLACE_EXISTING);
         }
 
-        // Restituisce il percorso relativo
         return subdir + "/" + filename;
     }
 }

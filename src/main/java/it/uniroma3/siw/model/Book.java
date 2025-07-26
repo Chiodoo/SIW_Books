@@ -32,7 +32,7 @@ public class Book{
     @Max(2025)
     private Long annoPubblicazione;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Immagine> immagini;
     //Non basta solo il cascade MERGE, ma serve anche l'orphanRemoval=true per eliminare le immagini quando vengono eliminate dal libro
     //CascadeType.MERGE aggiorna solo le entità figlie esistenti
