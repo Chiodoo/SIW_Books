@@ -1,30 +1,28 @@
-package it.uniroma3.siw.controller;
+package it.uniroma3.siw.controller.common;
 
-import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import it.uniroma3.siw.configuration.ViewResolver;
 import it.uniroma3.siw.security.UserPrincipal;
 
 @Controller
 public class IndexController {
 
+    @Autowired
+    private ViewResolver viewResolver;
+
     @GetMapping("/")
     public String index(@AuthenticationPrincipal UserPrincipal self, Model model) {
-        if (self != null && ADMIN_ROLE.equals(self.getRole())) {
-            return "admin/indexAdmin";
-        }
-        return "index";
+        return viewResolver.viewFor("index", self);
     }
 
     @GetMapping("/success")
     public String defaultAfterLogin(@AuthenticationPrincipal UserPrincipal self, Model model) {
-        if (self != null && ADMIN_ROLE.equals(self.getRole())) {
-            return "admin/indexAdmin";
-        }
-        return "index";
+        return "redirect:/";
     }
 }
