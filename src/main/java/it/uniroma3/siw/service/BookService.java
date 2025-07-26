@@ -72,7 +72,6 @@ public class BookService {
                 String path = imageStorageService.store(f, "books/" + book.getId());
                 Immagine img = new Immagine();
                 img.setPath(path);
-                img.setLibro(book);
                 imgs.add(img);
             }
         }

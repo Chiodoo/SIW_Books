@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Immagine {
@@ -13,10 +12,7 @@ public class Immagine {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String path;        //Path dell'immagine nel db
-
-    @ManyToOne
-    private Book book;       //Libro a cui appartiene l'immagine
+    private String path;        //Path dell'immagine nel filesystem
 
     public Long getId() {
         return id;
@@ -32,14 +28,6 @@ public class Immagine {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public Book getLibro() {
-        return book;
-    }
-
-    public void setLibro(Book book) {
-        this.book = book;
     }
 
     @Override

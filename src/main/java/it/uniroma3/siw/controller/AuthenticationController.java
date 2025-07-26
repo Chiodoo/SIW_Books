@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.model.Credentials;
+import it.uniroma3.siw.model.Immagine;
 import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.service.CredentialsService;
 import it.uniroma3.siw.service.UserService;
@@ -38,29 +39,28 @@ public class AuthenticationController {
 		return "formRegisterUser";
 	}
 
-	@PostMapping("/register")
+    @PostMapping("/register")
     public String registerUser(
-            @Valid @ModelAttribute("user") User user,
-            BindingResult userBindingResult,
-            @Valid @ModelAttribute("credentials") Credentials credentials,
-            BindingResult credentialsBindingResult,
-            @RequestParam("profileImage") MultipartFile profileImage,
-            Model model) throws IOException {
+        @Valid @ModelAttribute("user") User user,
+        BindingResult userBindingResult,
+        @Valid @ModelAttribute("credentials") Credentials credentials,
+        BindingResult credentialsBindingResult,
+        @RequestParam("profileImage") MultipartFile profileImage,
+        Model model) throws IOException {
 
         if (userBindingResult.hasErrors() || credentialsBindingResult.hasErrors()) {
             return "formRegisterUser";
         }
 
-        // 1) salvo User e Credentials
         userService.saveUser(user);
         credentials.setUser(user);
         credentialsService.saveCredentials(credentials);
 
-        // 2) upload immagine (se presente) e aggiornamento percorso
-        if (profileImage != null && !profileImage.isEmpty()) {
-            // salviamo sotto uploads/users/{userId}/…
-            String relativePath = imageStorageService.store(profileImage, "users/" + user.getId());
-            user.setImagePath(relativePath);
+        String path = imageStorageService.store(profileImage, "users/" + user.getId());
+        if (path != null) {
+            Immagine img = new Immagine();
+            img.setPath(path);
+            user.setImage(img);
             userService.saveUser(user);
         }
 

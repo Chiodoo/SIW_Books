@@ -46,7 +46,7 @@ public class AdminAuthorController {
             @Valid @ModelAttribute("author") Author author,
             BindingResult bindingResult,
             @RequestParam(value = "books", required = false) List<Long> bookIds,
-            @RequestParam("image") MultipartFile image,
+            @RequestParam("authorImage") MultipartFile authorImage,
             Model model) throws IOException {
 
         // 1) validazione bean
@@ -55,7 +55,7 @@ public class AdminAuthorController {
             return "admin/formNewAuthor";
         }
 
-        Author savedAuthor = authorService.createAuthorWithBooksAndImage(author, bookIds, image);
+        Author savedAuthor = authorService.createAuthorWithBooksAndImage(author, bookIds, authorImage);
 
         return "redirect:/author/" + savedAuthor.getId();
     }

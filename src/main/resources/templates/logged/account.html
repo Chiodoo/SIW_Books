@@ -11,7 +11,7 @@
         <div class="row g-0">
             <!-- Immagine profilo -->
             <div class="col-md-4">
-                <img th:src="@{'/uploads/' + ${user.imagePath}}" width="30%" alt="Foto profilo"/></div>
+                <img th:src="@{/uploads/{file}(file=${user.image.path})}" width="30%" alt="Foto profilo"/></div>
 
             <!-- Dettagli utente -->
             <div class="col-md-8">
