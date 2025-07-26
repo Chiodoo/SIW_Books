@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.model.Author;
 import it.uniroma3.siw.model.Book;
+import it.uniroma3.siw.model.Immagine;
 import it.uniroma3.siw.repository.AuthorRepository;
 import it.uniroma3.siw.repository.BookRepository;
 import it.uniroma3.siw.service.storage.ImageStorageService;
@@ -47,7 +48,9 @@ public class AuthorService {
         author = authorRepository.save(author);
         if (image != null && !image.isEmpty()) {
             String path = storageService.store(image, "authors/" + author.getId());
-            author.setPath(path);
+            Immagine immagine = new Immagine();
+            immagine.setPath(path);
+            author.setImage(immagine);
             author = authorRepository.save(author);
         }
         if (bookIds != null) {
