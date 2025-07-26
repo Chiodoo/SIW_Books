@@ -1,12 +1,16 @@
 package it.uniroma3.siw.service;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.model.Author;
@@ -19,6 +23,9 @@ import it.uniroma3.siw.service.storage.ImageStorageService;
 
 @Service
 public class AuthorService {
+
+    @Value("${upload.base-dir}")
+    private String uploadDir;
 
     @Autowired
     private AuthorRepository authorRepository;
@@ -75,6 +82,25 @@ public class AuthorService {
 
     public long countAuthors() {
         return authorRepository.count();
+    }
+
+    @Transactional
+    public boolean deleteAuthorWithImage(Long id) {
+        return authorRepository.findById(id).map(author -> {
+            // 1) cancello la cartella immagini
+            Path authorDir = Paths.get(uploadDir, "authors", id.toString());
+            FileSystemUtils.deleteRecursively(authorDir.toFile());
+
+            // 2) rimuovo le associazioni many-to-many in memoria
+            for (Book book : author.getBooks()) {
+                book.getAuthors().remove(author);
+            }
+            author.getBooks().clear();
+
+            // 3) cancello l'autore (le righe in book_author ora non esistono più)
+            authorRepository.delete(author);
+            return true;
+        }).orElse(false);
     }
 
 }
