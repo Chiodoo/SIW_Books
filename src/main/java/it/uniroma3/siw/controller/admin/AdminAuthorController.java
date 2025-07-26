@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,12 +30,6 @@ public class AdminAuthorController {
 
     @Autowired
     private AuthorService authorService;
-
-    @GetMapping("/authors")
-    public String getAuthors(Model model) {
-        model.addAttribute("authors", authorService.getAllAuthors());
-        return "admin/authors";
-    }
     
 
     @GetMapping("/formNewAuthor")
@@ -64,16 +57,7 @@ public class AdminAuthorController {
 
         Author savedAuthor = authorService.createAuthorWithBooksAndImage(author, bookIds, image);
 
-        return "redirect:/admin/author/" + savedAuthor.getId();
+        return "redirect:/author/" + savedAuthor.getId();
     }
-
-    @GetMapping("/author/{id}")
-    public String getAuthor(@PathVariable("id") Long id, Model model) {
-        Author author = authorService.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Autore non trovato: " + id));
-        model.addAttribute("author", author);
-        return "admin/author";
-    }
-    
 }
 

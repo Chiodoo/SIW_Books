@@ -27,7 +27,7 @@
             <h2>Autori</h2>
             <ul class="list-group">
                 <li class="list-group-item" th:each="author : ${book.authors}">
-                    <a th:href="@{'/admin/author/' + ${author.id}}" th:text="${author.name + ' ' + author.surname}">Nome Cognome</a>
+                    <a th:href="@{'/author/' + ${author.id}}" th:text="${author.name + ' ' + author.surname}">Nome Cognome</a>
                 </li>
             </ul>
     </div>
