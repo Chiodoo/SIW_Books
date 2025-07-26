@@ -15,14 +15,14 @@ classDiagram
 
   }
   
-  class Libro {
+  class Book {
     ID
     Titolo
     Anno di pubblicazione
     Edizione
   }
 
-  class Autore {
+  class Author {
     ID
     Nome
     Cognome
@@ -50,19 +50,22 @@ classDiagram
     Nascita
   }
 
-  class Credential {
+  class Credentials {
     ID
     Username
     Password
     Role
   }
 
-  Credential  -- "1" User
+  Credentials  -- "1" User
   User -- "*" Siw-Books
-  Libro -- "*" Siw-Books
-  Libro "1" -- "*" Recensione
-  Libro "*" -- "*" Autore
-  Libro "1" -- "*" Immagine
+  Book -- "*" Siw-Books
+  Book "1" -- "*" Recensione
+  Book "*" -- "*" Author
+  Book "1" -- "*" Immagine
+  User -- "1" Immagine
+  Author -- "1" Immagine
+  
 
 
 ```
