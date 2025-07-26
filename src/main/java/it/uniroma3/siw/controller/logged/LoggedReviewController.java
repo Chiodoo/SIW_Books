@@ -2,6 +2,7 @@ package it.uniroma3.siw.controller.logged;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,8 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.uniroma3.siw.model.Book;
 import it.uniroma3.siw.model.Recensione;
-import it.uniroma3.siw.model.User;
-import it.uniroma3.siw.security.SecurityUtils;
+import it.uniroma3.siw.security.UserPrincipal;
 import it.uniroma3.siw.service.BookService;
 import it.uniroma3.siw.service.RecensioneService;
 import jakarta.validation.Valid;
@@ -31,21 +31,19 @@ public class LoggedReviewController {
     @Autowired BookService bookService;
 
     @Autowired RecensioneService recensioneService;
-    
-    @Autowired SecurityUtils securityUtil;
 
     //Mostra il form solo se l'utente è autenticato e non ha già recensito il libro
     @GetMapping("/formNewReview/{id}")
-    public String formNewReview(@PathVariable("id") Long id, Model model,RedirectAttributes redirectAttr) {
+    public String formNewReview(@AuthenticationPrincipal UserPrincipal self,@PathVariable("id") Long id, Model model,RedirectAttributes redirectAttr) {
         Book book = this.bookService.findById(id);
-        User user = securityUtil.getCurrentUser();
+        Long userId = self.getUserId();
 
-        if (user == null) {
+        if (userId == null) {
             redirectAttr.addFlashAttribute("errorMessage", "Devi essere autenticato.");
             return "redirect:/login";
         }
 
-        if(this.recensioneService.hasRecensito(user, book)) {
+        if(this.recensioneService.hasRecensito(userId, book)) {
             redirectAttr.addFlashAttribute("errorMessage", "Hai già lasciato una recensione per questo libro.");
             return "redirect:/book/" + book.getId();
         }
@@ -57,11 +55,11 @@ public class LoggedReviewController {
 
     //Gestisce l'invio del form per la recensione
     @PostMapping("/formNewReview/{id}")
-    public String submitNewReview(@PathVariable("id") Long id ,@Valid @ModelAttribute("review") Recensione formReview, BindingResult bindingResult, Model model, RedirectAttributes redirectAttr) {
+    public String submitNewReview(@AuthenticationPrincipal UserPrincipal self, @PathVariable("id") Long id ,@Valid @ModelAttribute("review") Recensione formReview, BindingResult bindingResult, Model model, RedirectAttributes redirectAttr) {
 
-        User user = securityUtil.getCurrentUser();
+        Long userId = self.getUserId();
 
-        if (user == null) {
+        if (userId == null) {
             redirectAttr.addFlashAttribute("errorMessage", "Devi essere autenticato.");
             return "redirect:/login";
         }
@@ -73,7 +71,7 @@ public class LoggedReviewController {
             return "logged/formNewReview";
         }
 
-        if(this.recensioneService.hasRecensito(user, book)) {
+        if(this.recensioneService.hasRecensito(userId, book)) {
             redirectAttr.addFlashAttribute("errorMessage", "Hai già lasciato una recensione per questo libro.");
             return "redirect:/book/" + book.getId();
         }
@@ -83,7 +81,7 @@ public class LoggedReviewController {
         review.setTitolo(formReview.getTitolo());
         review.setTesto(formReview.getTesto());
         review.setVoto(formReview.getVoto());
-        this.recensioneService.save(review, user, book);
+        this.recensioneService.save(review, userId, book);
 
         return "redirect:/book/" + id;
     }

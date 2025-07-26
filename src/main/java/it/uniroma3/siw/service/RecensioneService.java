@@ -7,6 +7,7 @@ import it.uniroma3.siw.model.Book;
 import it.uniroma3.siw.model.Recensione;
 import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.repository.RecensioneRepository;
+import it.uniroma3.siw.repository.UserRepository;
 
 @Service
 public class RecensioneService {
@@ -14,7 +15,15 @@ public class RecensioneService {
     @Autowired
     private RecensioneRepository recensioneRepository;
 
-    public void save(Recensione recensione, User user, Book book) {
+    @Autowired
+    private UserRepository userRepository;
+
+    public void save(Recensione recensione, Long userId, Book book) {
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("Utente non trovato: " + userId));
+
+
         //Ulteriore controllo per evitare che l'utente possa recensire lo stesso libro più volte
         if (recensioneRepository.existsByUserAndBook(user, book)) {
             throw new IllegalStateException("Hai già recensito questo libro");
@@ -27,6 +36,12 @@ public class RecensioneService {
     }
 
     public boolean hasRecensito(User user, Book book) {
+        return this.recensioneRepository.existsByUserAndBook(user, book);
+    }
+
+    public boolean hasRecensito(Long userId, Book book) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("Utente non trovato: " + userId));
         return this.recensioneRepository.existsByUserAndBook(user, book);
     }
 

@@ -11,7 +11,7 @@
     <div th:if="${users.isEmpty()}">Non ci utenti nel sistema</div>
     <ul>
       <li th:each="user: ${users}">
-        <a th:href="@{'/user' + '/' + ${user.id}}"
+        <a th:href="@{'/admin/user' + '/' + ${user.id}}"
           th:text="${user.name} + ' ' + ${user.surname}">Up! (200)</a>
       </li>
     </ul>

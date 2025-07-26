@@ -1,32 +1,30 @@
 package it.uniroma3.siw.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import it.uniroma3.siw.security.AuthorizationService;
+import it.uniroma3.siw.security.UserPrincipal;
 
 @Controller
 public class IndexController {
 
-	@Autowired AuthorizationService authorizationService;
-
-    @GetMapping(value = "/") 
-	public String index(Model model) {
-		if(this.authorizationService.isAdmin()) {
-			return "admin/indexAdmin";
-		}
-		return "index";
-	}
-
-    @GetMapping(value = "/success")
-    public String defaultAfterLogin(Model model) {
-
-		if(this.authorizationService.isAdmin()) {
-			return "admin/indexAdmin";
-		}
-		return "index";
+    @GetMapping("/")
+    public String index(@AuthenticationPrincipal UserPrincipal self, Model model) {
+        if (self != null && ADMIN_ROLE.equals(self.getRole())) {
+            return "admin/indexAdmin";
+        }
+        return "index";
     }
-    
+
+    @GetMapping("/success")
+    public String defaultAfterLogin(@AuthenticationPrincipal UserPrincipal self, Model model) {
+        if (self != null && ADMIN_ROLE.equals(self.getRole())) {
+            return "admin/indexAdmin";
+        }
+        return "index";
+    }
 }

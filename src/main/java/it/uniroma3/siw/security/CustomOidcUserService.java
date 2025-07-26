@@ -1,15 +1,12 @@
 package it.uniroma3.siw.security;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
@@ -68,10 +65,7 @@ public class CustomOidcUserService extends OidcUserService {
         }
 
         // 4) Ricostruisco un OidcUser con le stesse authorities del token
-        return new DefaultOidcUser(
-            List.of(new SimpleGrantedAuthority(cred.getRole())),
-            oidcUser.getIdToken(),
-            oidcUser.getUserInfo()
-        );
+        return new UserPrincipal(cred, oidcUser.getIdToken(), oidcUser.getUserInfo());
+
     }
 }
