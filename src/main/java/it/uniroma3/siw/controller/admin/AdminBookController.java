@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.uniroma3.siw.model.Book;
 import it.uniroma3.siw.service.AuthorService;
 import it.uniroma3.siw.service.BookService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @Controller
@@ -71,5 +73,34 @@ public class AdminBookController {
             ra.addFlashAttribute("error", "Libro non trovato, impossibile eliminare.");
         }
         return "redirect:/books";
+    }
+
+    @GetMapping("/editBook/{id}")
+    public String editBookForm(@PathVariable Long id, Model model) {
+        Book book = bookService.findById(id);
+        if (book == null) {
+            throw new EntityNotFoundException("Book not found with id: " + id);
+        }
+        model.addAttribute("book", book);
+        model.addAttribute("allAuthors", authorService.getAllAuthors());
+        return "admin/formEditBook";  // un template simile al tuo formNewBook ma pre-popolato
+    }
+
+    @PutMapping("/book/{id}")
+    public String updateBook(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("book") Book bookForm,
+            BindingResult br,
+            @RequestParam(value="authors", required=false) List<Long> authorIds,
+            @RequestParam("bookImages") List<MultipartFile> images,
+            Model model) throws IOException {
+
+        if (br.hasErrors()) {
+            model.addAttribute("allAuthors", authorService.getAllAuthors());
+            return "admin/formEditBook";
+        }
+
+        bookService.updateBook(id, bookForm, authorIds, images);
+        return "redirect:/book/" + id;
     }
 }

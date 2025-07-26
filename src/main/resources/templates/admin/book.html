@@ -11,6 +11,13 @@
     <div class="container mt-4">
         <a href="/"><img src="/images/logo.png" width="20%" alt="Logo"></a>
 
+        <div class="mt-3 d-inline-block">
+            <!-- Link per visualizzare il form di modifica -->
+            <a th:href="@{/admin/editBook/{id}(id=${book.id})}" class="btn btn-primary">
+                <i class="bi bi-pencil"></i> Modifica libro
+            </a>
+        </div>
+
         <div class="mt-3">
             <form th:action="@{/admin/deleteBook/{id}(id=${book.id})}" method="post" onsubmit="return confirm('Sei sicuro di voler eliminare questo libro?');">
                 <!-- CSRF token, se usi Spring Security: -->
