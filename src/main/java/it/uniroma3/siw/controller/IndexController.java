@@ -14,7 +14,7 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(@AuthenticationPrincipal UserPrincipal self, Model model) {
-        if (self != null && ADMIN_ROLE.equals(self.getCredentialsDomain().getRole())) {
+        if (self != null && ADMIN_ROLE.equals(self.getRole())) {
             return "admin/indexAdmin";
         }
         return "index";
@@ -22,7 +22,7 @@ public class IndexController {
 
     @GetMapping("/success")
     public String defaultAfterLogin(@AuthenticationPrincipal UserPrincipal self, Model model) {
-        if (self != null && ADMIN_ROLE.equals(self.getCredentialsDomain().getRole())) {
+        if (self != null && ADMIN_ROLE.equals(self.getRole())) {
             return "admin/indexAdmin";
         }
         return "index";

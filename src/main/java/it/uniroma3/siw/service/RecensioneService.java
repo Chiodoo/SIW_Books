@@ -18,10 +18,10 @@ public class RecensioneService {
     @Autowired
     private UserRepository userRepository;
 
-    public void save(Recensione recensione, User contextUser, Book book) {
+    public void save(Recensione recensione, Long userId, Book book) {
 
-        User user = userRepository.findById(contextUser.getId())
-            .orElseThrow(() -> new IllegalArgumentException("Utente non trovato: " + contextUser.getId()));
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("Utente non trovato: " + userId));
 
 
         //Ulteriore controllo per evitare che l'utente possa recensire lo stesso libro più volte
@@ -36,6 +36,12 @@ public class RecensioneService {
     }
 
     public boolean hasRecensito(User user, Book book) {
+        return this.recensioneRepository.existsByUserAndBook(user, book);
+    }
+
+    public boolean hasRecensito(Long userId, Book book) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("Utente non trovato: " + userId));
         return this.recensioneRepository.existsByUserAndBook(user, book);
     }
 

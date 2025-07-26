@@ -12,34 +12,40 @@ import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import it.uniroma3.siw.model.Credentials;
+import it.uniroma3.siw.model.User;
 
 /**
  * UserPrincipal unifies Spring Security UserDetails and OIDC principal,
- * storing the application Credentials + User domain object.
+ * storing essential user data to avoid LazyInitialization.
  */
 public class UserPrincipal implements UserDetails, OidcUser {
 
-    private final Credentials credentials;
+    private final Long userId;
+    private final String displayName;
+    private final String username;
+    private final String password;
+    private final String role;
+    private final boolean oauth2;
     private final Map<String,Object> attributes;
     private final OidcIdToken idToken;
     private final OidcUserInfo userInfo;
 
     /**
-     * Costruttore per form-login (solo UserDetails).
+     * Form-login constructor.
      */
     public UserPrincipal(Credentials credentials) {
         this(credentials, Collections.emptyMap(), null, null);
     }
 
     /**
-     * Costruttore per OAuth2 puro (implicitamente supportato come OidcUser -> OAuth2User).
+     * OAuth2 constructor (attributes only).
      */
     public UserPrincipal(Credentials credentials, Map<String,Object> attributes) {
         this(credentials, attributes, null, null);
     }
 
     /**
-     * Costruttore per OIDC (UserDetails + OidcUser).
+     * OIDC constructor (idToken + userInfo).
      */
     public UserPrincipal(Credentials credentials,
                          OidcIdToken idToken,
@@ -47,33 +53,65 @@ public class UserPrincipal implements UserDetails, OidcUser {
         this(credentials, Collections.emptyMap(), idToken, userInfo);
     }
 
-    // Costruttore interno comune
+    // Common initializer
     private UserPrincipal(Credentials credentials,
                           Map<String,Object> attributes,
                           OidcIdToken idToken,
                           OidcUserInfo userInfo) {
-        this.credentials = credentials;
+        User user = credentials.getUser();
+        this.userId      = user.getId();
+        this.displayName = user.getName() +
+            (user.getSurname() != null && !user.getSurname().isBlank()
+                ? " " + user.getSurname() : "");
+        this.username    = credentials.getUsername();
+        this.password    = credentials.getPassword();
+        this.role        = credentials.getRole();
+        this.oauth2      = (idToken != null) || !attributes.isEmpty();
         this.attributes  = attributes;
         this.idToken     = idToken;
         this.userInfo    = userInfo;
     }
 
-    // --- UserDetails methods ---
+    // --- Convenience getters ---
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /** Role string from Credentials */
+    public String getRole() {
+        return role;
+    }
+
+    /** true if OAuth2 or OIDC login */
+    public boolean isOAuth2() {
+        return oauth2;
+    }
+
+    /** alias (for templates) */
+    public boolean isOauth2() {
+        return oauth2;
+    }
+
+    // --- UserDetails interface ---
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(
-            new SimpleGrantedAuthority(credentials.getRole())
+            new SimpleGrantedAuthority(role)
         );
     }
 
-    @Override public String getPassword() { return credentials.getPassword(); }
-    @Override public String getUsername() { return credentials.getUsername(); }
-    @Override public boolean isAccountNonExpired()    { return true; }
-    @Override public boolean isAccountNonLocked()     { return true; }
-    @Override public boolean isCredentialsNonExpired(){ return true; }
-    @Override public boolean isEnabled()              { return true; }
+    @Override public String getPassword()             { return password; }
+    @Override public String getUsername()             { return username; }
+    @Override public boolean isAccountNonExpired()     { return true; }
+    @Override public boolean isAccountNonLocked()      { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled()               { return true; }
 
-    // --- OidcUser (extends OAuth2User) methods ---
+    // --- OidcUser (and OAuth2User) ---
     @Override
     public Map<String,Object> getAttributes() {
         return attributes;
@@ -85,19 +123,10 @@ public class UserPrincipal implements UserDetails, OidcUser {
             return idToken.getSubject();
         }
         Object sub = attributes.get("sub");
-        return (sub != null? sub.toString(): credentials.getUsername());
+        return (sub != null ? sub.toString() : username);
     }
 
     @Override public OidcIdToken getIdToken()   { return idToken; }
     @Override public OidcUserInfo getUserInfo(){ return userInfo; }
-    @Override public Map<String,Object> getClaims() { return attributes; }
-
-    // --- Accesso al dominio ---
-    public Credentials getCredentialsDomain() {
-        return credentials;
-    }
-
-    public it.uniroma3.siw.model.User getUserDomain() {
-        return credentials.getUser();
-    }
+    @Override public Map<String,Object> getClaims(){ return attributes; }
 }

@@ -27,7 +27,7 @@ public class LoggedUserController {
 
     @GetMapping("/account")
     public String getUserAccount(@AuthenticationPrincipal UserPrincipal self, Model model) {
-        Long userId = self.getUserDomain().getId();
+        Long userId = self.getUserId();
 
         if(userId == null) {
             return "redirect:/login"; // Se non c'è un utente autenticato, reindirizza al login

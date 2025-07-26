@@ -11,7 +11,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.uniroma3.siw.model.Book;
 import it.uniroma3.siw.model.Recensione;
-import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.security.UserPrincipal;
 import it.uniroma3.siw.service.BookService;
 import it.uniroma3.siw.service.RecensioneService;
@@ -37,14 +36,14 @@ public class LoggedReviewController {
     @GetMapping("/formNewReview/{id}")
     public String formNewReview(@AuthenticationPrincipal UserPrincipal self,@PathVariable("id") Long id, Model model,RedirectAttributes redirectAttr) {
         Book book = this.bookService.findById(id);
-        User user = self.getUserDomain();
+        Long userId = self.getUserId();
 
-        if (user == null) {
+        if (userId == null) {
             redirectAttr.addFlashAttribute("errorMessage", "Devi essere autenticato.");
             return "redirect:/login";
         }
 
-        if(this.recensioneService.hasRecensito(user, book)) {
+        if(this.recensioneService.hasRecensito(userId, book)) {
             redirectAttr.addFlashAttribute("errorMessage", "Hai già lasciato una recensione per questo libro.");
             return "redirect:/book/" + book.getId();
         }
@@ -58,9 +57,9 @@ public class LoggedReviewController {
     @PostMapping("/formNewReview/{id}")
     public String submitNewReview(@AuthenticationPrincipal UserPrincipal self, @PathVariable("id") Long id ,@Valid @ModelAttribute("review") Recensione formReview, BindingResult bindingResult, Model model, RedirectAttributes redirectAttr) {
 
-        User user = self.getUserDomain();
+        Long userId = self.getUserId();
 
-        if (user == null) {
+        if (userId == null) {
             redirectAttr.addFlashAttribute("errorMessage", "Devi essere autenticato.");
             return "redirect:/login";
         }
@@ -72,7 +71,7 @@ public class LoggedReviewController {
             return "logged/formNewReview";
         }
 
-        if(this.recensioneService.hasRecensito(user, book)) {
+        if(this.recensioneService.hasRecensito(userId, book)) {
             redirectAttr.addFlashAttribute("errorMessage", "Hai già lasciato una recensione per questo libro.");
             return "redirect:/book/" + book.getId();
         }
@@ -82,7 +81,7 @@ public class LoggedReviewController {
         review.setTitolo(formReview.getTitolo());
         review.setTesto(formReview.getTesto());
         review.setVoto(formReview.getVoto());
-        this.recensioneService.save(review, user, book);
+        this.recensioneService.save(review, userId, book);
 
         return "redirect:/book/" + id;
     }
