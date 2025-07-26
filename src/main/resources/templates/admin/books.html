@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Libri</title>
+    <title>Libri - Admin</title>
     <link rel="stylesheet" href="/style.css?version=2" />
   </head>
 
@@ -11,7 +11,7 @@
     <div th:if="${books.isEmpty()}">Non ci sono libri nel sistema</div>
     <ul>
       <li th:each="book: ${books}">
-        <a th:href="@{'/admin/book' + '/' + ${book.id}}"
+        <a th:href="@{'/book' + '/' + ${book.id}}"
           th:text="${book.titolo} + ' (' + ${book.annoPubblicazione} + ')'">Up! (200)</a>
       </li>
     </ul>
