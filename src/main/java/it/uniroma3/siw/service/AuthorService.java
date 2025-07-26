@@ -1,16 +1,12 @@
 package it.uniroma3.siw.service;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.siw.model.Author;
@@ -24,9 +20,6 @@ import it.uniroma3.siw.service.storage.ImageStorageService;
 @Service
 public class AuthorService {
 
-    @Value("${upload.base-dir}")
-    private String uploadDir;
-
     @Autowired
     private AuthorRepository authorRepository;
 
@@ -34,7 +27,7 @@ public class AuthorService {
     private BookRepository bookRepository;
 
     @Autowired
-    private ImageStorageService storageService;
+    private ImageStorageService imageStorageService;
 
     public void save(Author author) {
         this.authorRepository.save(author);
@@ -54,7 +47,7 @@ public class AuthorService {
                                                 MultipartFile image) throws IOException {
         author = authorRepository.save(author);
         if (image != null && !image.isEmpty()) {
-            String path = storageService.store(image, "authors/" + author.getId());
+            String path = imageStorageService.store(image, "authors/" + author.getId());
             Immagine immagine = new Immagine();
             immagine.setPath(path);
             author.setImage(immagine);
@@ -87,9 +80,13 @@ public class AuthorService {
     @Transactional
     public boolean deleteAuthorWithImage(Long id) {
         return authorRepository.findById(id).map(author -> {
+
             // 1) cancello la cartella immagini
-            Path authorDir = Paths.get(uploadDir, "authors", id.toString());
-            FileSystemUtils.deleteRecursively(authorDir.toFile());
+            try {
+                imageStorageService.deleteDirectory("authors/" + author.getId());
+            } catch (IOException e) {
+                throw new RuntimeException("Errore durante l'eliminazione dell'immagine dell'autore", e);
+            }
 
             // 2) rimuovo le associazioni many-to-many in memoria
             for (Book book : author.getBooks()) {
