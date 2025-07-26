@@ -13,6 +13,18 @@
             </a>
         </div>
 
+        <div class="mt-4">
+            <form th:action="@{/admin/deleteAuthor/{id}(id=${author.id})}" method="post" onsubmit="return confirm('Sei sicuro di voler eliminare questo autore e la sua immagine?');">
+                <!-- CSRF token -->
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <!-- override method -->
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash"></i> Elimina autore
+                </button>
+            </form>
+        </div>
+
         <!-- Mostra i dettagli dell'autore se esiste -->
         <div th:if="${author}">
             <h1 th:text="${author.name + ' ' + author.surname}">Nome Cognome</h1>

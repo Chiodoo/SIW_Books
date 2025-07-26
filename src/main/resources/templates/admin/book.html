@@ -11,6 +11,18 @@
     <div class="container mt-4">
         <a href="/"><img src="/images/logo.png" width="20%" alt="Logo"></a>
 
+        <div class="mt-3">
+            <form th:action="@{/admin/deleteBook/{id}(id=${book.id})}" method="post" onsubmit="return confirm('Sei sicuro di voler eliminare questo libro?');">
+                <!-- CSRF token, se usi Spring Security: -->
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <!-- override method -->
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash"></i> Elimina libro
+                </button>
+            </form>
+        </div>
+
         <div th:if="${book != null}" class="mt-4">
             <h1 th:text="${book.titolo}">Titolo libro</h1>
             <p>Anno: <span th:text="${book.annoPubblicazione}">2000</span></p>
