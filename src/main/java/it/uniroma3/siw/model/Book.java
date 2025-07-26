@@ -1,5 +1,6 @@
 package it.uniroma3.siw.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +34,8 @@ public class Book{
     private Long annoPubblicazione;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<Immagine> immagini;
+    @JoinColumn(name = "book_id")
+    private List<Immagine> immagini = new ArrayList<>();
     //Non basta solo il cascade MERGE, ma serve anche l'orphanRemoval=true per eliminare le immagini quando vengono eliminate dal libro
     //CascadeType.MERGE aggiorna solo le entità figlie esistenti
     //orphanRemoval=true elimina le entità figlie che non sono più referenziate dal libro

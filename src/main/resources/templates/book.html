@@ -2,39 +2,54 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Libri</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <title th:text="${book != null ? book.titolo : 'Libri'}">Libri</title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
 </head>
 
 <body>
-    <div>
+    <div class="container mt-4">
         <a href="/"><img src="/images/logo.png" width="20%" alt="Logo"></a>
-    </div>
 
-    <div th:if="${book}">
-        <h1 th:text="${book.titolo}">Titolo libro</h1>
-        <div>Anno: <span th:text="${book.annoPubblicazione}">2000</span></div>
-        <div th:if="${book.authors}">
-            <span>Autori: </span>
-            <span th:each="author : ${book.authors}" th:text="${author.name} + ' ' + ${author.surname} + ', '"></span>
-        </div>
-        <div th:unless="${book.authors}">
-            <p>Non ci sono autori registrati per questo libro</p>
-        </div>
+        <div th:if="${book != null}" class="mt-4">
+            <h1 th:text="${book.titolo}">Titolo libro</h1>
+            <p>Anno: <span th:text="${book.annoPubblicazione}">2000</span></p>
 
-        <!-- Iterazione sulle immagini -->
-        <div th:if="${book.immagini}">
-            <h2>Galleria Immagini</h2>
-            <div th:each="img : ${book.immagini}">
-                <img th:src="'/uploads/' + ${img.path}" width="30%" alt="Immagine libro"/>
+            <div th:if="${book.authors != null and !#lists.isEmpty(book.authors)}">
+                <p>
+                    <strong>Autori:</strong>
+                    <span th:each="author,iterStat : ${book.authors}">
+                        <span th:text="${author.name + ' ' + author.surname}">Nome Cognome</span>
+                        <span th:if="${!iterStat.last}">, </span>
+                    </span>
+                </p>
+            </div>
+            <div th:unless="${book.authors != null and !#lists.isEmpty(book.authors)}">
+                <p>Non ci sono autori registrati per questo libro.</p>
+            </div>
+
+            <!-- Galleria Immagini -->
+            <div th:if="${book.immagini != null and book.immagini.size() > 0}" class="mt-3">
+                <h2>Galleria Immagini</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-3" th:each="img : ${book.immagini}">
+                        <img th:src="@{/uploads/{f}(f=${img.path})}"
+                             class="img-fluid rounded"
+                             alt="Immagine libro"/>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${book.immagini == null or book.immagini.size() == 0}" class="mt-3">
+                <p>Nessuna immagine disponibile per questo libro.</p>
             </div>
         </div>
-    </div>
 
-    <div th:unless="${book}">
-        <p>Libro non esistente</p>
-    </div>
+        <div th:unless="${book != null}" class="mt-4">
+            <p>Libro non esistente</p>
+        </div>
 
-    <div th:insert="~{reviews :: reviewsFragment}"></div>
+        <!-- Fragment recensioni -->
+        <div th:insert="~{reviews :: reviewsFragment}"></div>
+    </div>
 </body>
 </html>
