@@ -27,6 +27,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -136,6 +137,29 @@ public class LoggedUserController {
 
         redirectAttrs.addFlashAttribute("success", "Profilo aggiornato con successo, effettua nuovamente l'accesso!");
         return "redirect:/login";
+    }
+
+    @DeleteMapping("/account/deleteMe")
+    public String deleteUserAccount(
+            @AuthenticationPrincipal UserPrincipal self,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            RedirectAttributes redirectAttrs) {
+
+        boolean ok = userService.deleteUserWithImage(self.getUserId());
+        if (ok) {
+            // 1) Invalidiamo la sessione corrente e puliamo il contesto di sicurezza
+            new SecurityContextLogoutHandler()
+                .logout(request,
+                        response,
+                        SecurityContextHolder.getContext().getAuthentication());
+
+            // 2) Aggiungiamo il messaggio flash per il redirect
+            redirectAttrs.addFlashAttribute("success", "Account eliminato con successo.");
+        } else {
+            redirectAttrs.addFlashAttribute("error", "Account non trovato.");
+        }
+        return "redirect:/";
     }
     
 }

@@ -1,5 +1,7 @@
 package it.uniroma3.siw.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,5 +49,13 @@ public class RecensioneService {
 
     public Iterable<Recensione> findByBookId(Long bookId) {
         return this.recensioneRepository.findByBookId(bookId);
+    }
+
+    public Optional<Recensione> findById(Long id) {
+        return this.recensioneRepository.findById(id);
+    }
+
+    public void deleteById(Long id) {
+        this.recensioneRepository.deleteById(id);
     }
 }

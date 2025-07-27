@@ -1,4 +1,3 @@
-<!-- src/main/resources/templates/reviews.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -24,6 +23,31 @@
             di <span th:text="|${rec.user.name} ${rec.user.surname}|">Autore</span>
           </small>
         </p>
+
+        <!-- 1) Utenti normali: possono cancellare SOLO le proprie recensioni -->
+        <div th:if="${!userDetails.admin} and (${userDetails.userId} == ${rec.user.id})">
+          <form th:action="@{/logged/deleteReview/{bookId}/{reviewId}
+                           (bookId=${book.id}, reviewId=${rec.id})}"
+                method="post">
+            <input type="hidden" name="_method" value="delete"/>
+            <button type="submit" class="btn btn-sm btn-danger">
+              Cancella questa recensione
+            </button>
+          </form>
+        </div>
+
+        <!-- 2) Admin: può cancellare QUALSIASI recensione -->
+        <div th:if="${userDetails.admin}">
+          <form th:action="@{/admin/deleteReview/{bookId}/{reviewId}
+                           (bookId=${book.id}, reviewId=${rec.id})}"
+                method="post">
+            <input type="hidden" name="_method" value="delete"/>
+            <button type="submit" class="btn btn-sm btn-danger">
+              Cancella (admin)
+            </button>
+          </form>
+        </div>
+
       </div>
     </div>
   </div>

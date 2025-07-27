@@ -84,4 +84,14 @@ public class CredentialsService {
     public Credentials updateCredential(Credentials credentials, String oldUsername) {
         return saveCredentials(credentials);
     }
+
+    
+    @Transactional
+    @Caching(evict = {
+    @CacheEvict(cacheNames = "credenzialiByUsername", allEntries = true),
+    @CacheEvict(cacheNames = "credenzialiById",       key = "#userId")
+    })
+    public void deleteCredentialsByUserId(Long userId) {
+        credentialsRepository.deleteByUser_Id(userId);
+    }
 }

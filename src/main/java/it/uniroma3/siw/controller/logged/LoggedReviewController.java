@@ -1,5 +1,7 @@
 package it.uniroma3.siw.controller.logged;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +18,7 @@ import it.uniroma3.siw.service.BookService;
 import it.uniroma3.siw.service.RecensioneService;
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -84,6 +87,35 @@ public class LoggedReviewController {
         this.recensioneService.save(review, userId, book);
 
         return "redirect:/book/" + id;
+    }
+
+    /**
+     * Cancella la recensione solo se l'utente loggato è l'autore.
+     */
+
+    @DeleteMapping("/deleteReview/{bookId}/{reviewId}")
+    public String deleteReview(
+            @PathVariable Long bookId,
+            @PathVariable Long reviewId,
+            RedirectAttributes redirectAttr,
+            @AuthenticationPrincipal UserPrincipal self // la tua UserDetails con getUserId()
+    ) {
+        // 1) Recupera la recensione
+        Optional<Recensione> maybeReview = recensioneService.findById(reviewId);
+        if (maybeReview.isPresent()) {
+            Recensione review = maybeReview.get();
+            // 2) Controlla che l’utente loggato ne sia l’autore
+            if (review.getUser().getId().equals(self.getUserId())) {
+                // 3) Elimina
+                recensioneService.deleteById(reviewId);
+                // 4) Redirect alla pagina del libro
+                redirectAttr.addFlashAttribute("success", "Recensione eliminata con successo.");
+                return "redirect:/book/" + bookId;
+            }
+        }
+        redirectAttr.addFlashAttribute("error", "Non puoi eliminare questa recensione.");
+        // se non trova la recensione o non è autorizzato
+        return "redirect:/book/" + bookId;
     }
     
 }
