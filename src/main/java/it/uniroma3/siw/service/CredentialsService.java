@@ -77,10 +77,11 @@ public class CredentialsService {
      */
     @Transactional
     @Caching(evict = {
+        @CacheEvict(cacheNames = "credenzialiByUsername", key = "#oldUsername"),
         @CacheEvict(cacheNames = "credenzialiByUsername", key = "#credentials.username"),
-        @CacheEvict(cacheNames = "credenzialiById",      key = "#credentials.user.id")
+        @CacheEvict(cacheNames = "credenzialiById", key = "#credentials.user.id")
     })
-    public Credentials updateCredential(Credentials credentials) {
+    public Credentials updateCredential(Credentials credentials, String oldUsername) {
         return saveCredentials(credentials);
     }
 }
