@@ -11,21 +11,16 @@
       <p class="text-muted">Nessuna recensione disponibile.</p>
     </div>
 
-    <div th:each="rec : ${reviews}" class="card mb-3">
+    <div th:each="rec : ${reviews}" class="card review-card mb-3">
       <div class="card-body">
         <h5 class="card-title" th:text="${rec.titolo}">Titolo recensione</h5>
           <h6 class="card-subtitle mb-2 text-muted">
             Voto:
-            <span th:with="
-                      full=${T(java.lang.Math).floor(rec.voto)},
-                      half=${rec.voto - full >= 0.5 ? 1 : 0},
-                      empty=${5 - full - half}">
-              <!-- stelle piene -->
-              <i class="fa-solid fa-star" th:each="i : ${#numbers.sequence(1, full)}"></i>
-              <!-- mezza stella -->
-              <i class="fa-solid fa-star-half-stroke" th:if="${half == 1}"></i>
-              <!-- stelle vuote -->
-              <i class="fa-regular fa-star" th:each="i : ${#numbers.sequence(1, empty)}"></i>
+            <span th:each="i : ${#numbers.sequence(1,5)}">
+              <i th:classappend="
+                  ${rec.voto >= i} ? 'fa-solid fa-star' :
+                  (${rec.voto >= i - 0.5} ? 'fa-solid fa-star-half-stroke' : 'fa-regular fa-star')">
+              </i>
             </span>
           </h6>
         <p class="card-text" th:text="${rec.testo}">Testo recensione…</p>
@@ -36,24 +31,24 @@
         </p>
 
         <!-- 1) Utenti normali: possono cancellare SOLO le proprie recensioni -->
-        <div th:if="${!userDetails.admin} and (${userDetails.userId} == ${rec.user.id})">
+        <div th:if="${userDetails != null and !userDetails.admin and userDetails.userId == rec.user.id}">
           <form th:action="@{/logged/deleteReview/{bookId}/{reviewId}
                            (bookId=${book.id}, reviewId=${rec.id})}"
                 method="post">
             <input type="hidden" name="_method" value="delete"/>
-            <button type="submit" class="btn btn-sm btn-danger">
+            <button type="submit" class="delete-review">
               Cancella questa recensione
             </button>
           </form>
         </div>
 
         <!-- 2) Admin: può cancellare QUALSIASI recensione -->
-        <div th:if="${userDetails.admin}">
+        <div th:if="${userDetails != null and userDetails.admin}">
           <form th:action="@{/admin/deleteReview/{bookId}/{reviewId}
                            (bookId=${book.id}, reviewId=${rec.id})}"
                 method="post">
             <input type="hidden" name="_method" value="delete"/>
-            <button type="submit" class="btn btn-sm btn-danger">
+            <button type="submit" class="delete-review">
               Cancella (admin)
             </button>
           </form>

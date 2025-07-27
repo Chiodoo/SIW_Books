@@ -2,55 +2,87 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Nuovo Autore</title>
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <title>SiwBook - Nuovo Autore</title>
+  <link rel="stylesheet" href="/css/add-author.css" />
 </head>
 <body>
-  <div>
-    <a th:href="@{/}"><img th:src="@{/images/logo.png}" width="20%" alt="Logo"></a>
+  <div class="header-logo">
+    <a th:href="@{/}"><img th:src="@{/images/logo.png}" alt="Logo"></a>
   </div>
-  <div class="container mt-4">
-    <h2>Aggiungi Nuovo Autore</h2>
-    <form th:action="@{/admin/author}" th:object="${author}" method="post" enctype="multipart/form-data">
+  <div class="author-container">
+    <h2>Aggiungi un autore</h2>
+    <form th:action="@{/admin/author}" th:object="${author}"
+          method="POST" enctype="multipart/form-data" class="author-card">
 
-      <div class="mb-3">
-        <label for="name" class="form-label">Nome</label>
-        <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Inserisci il nome" required>
-      </div>
-      <div class="mb-3">
-        <label for="surname" class="form-label">Cognome</label>
-        <input type="text" th:field="*{surname}" class="form-control" id="surname" placeholder="Inserisci il cognome" required>
-      </div>
-      <div class="mb-3">
-        <label for="nationality" class="form-label">Nazionalità</label>
-        <input type="text" th:field="*{nationality}" class="form-control" id="nationality" placeholder="Es. Italiana" required>
-      </div>
-      <div class="row">
-        <div class="col">
-          <label for="birth" class="form-label">Data di Nascita</label>
-          <input type="date" th:field="*{birth}" class="form-control" id="birth" required>
-        </div>
-        <div class="col">
-          <label for="death" class="form-label">Data di Morte (facoltativa)</label>
-          <input type="date" th:field="*{death}" class="form-control" id="death">
-        </div>
-      </div>
-      <div class="mb-3 mt-3">
-        <label for="image" class="form-label">Immagine Autore</label>
-        <input type="file" name="authorImage" class="form-control" id="image" accept="image/*">
+      <!-- error globali -->
+      <div class="form-group">
+        <p th:each="err : ${#fields.globalErrors()}"
+           th:text="${err}" class="text-error"></p>
       </div>
 
-      <!-- Campo di ricerca per i libri -->
-      <div class="mb-2">
-        <input type="text" class="form-control mb-2 list-filter" placeholder="Cerca un libro..." data-target="books">
-        <select multiple id="books" class="form-select" size="6" th:field="*{books}">
-          <option th:each="book : ${allBooks}" th:value="${book.id}" th:text="${book.titolo + ' (' + book.annoPubblicazione + ')'}"></option>
+      <div class="form-group">
+        <input required type="text" placeholder="Nome"
+               th:field="*{name}" />
+        <span th:if="${#fields.hasErrors('name')}"
+              th:errors="*{name}" class="text-error"></span>
+      </div>
+
+      <div class="form-group">
+        <input required type="text" placeholder="Cognome"
+               th:field="*{surname}" />
+        <span th:if="${#fields.hasErrors('surname')}"
+              th:errors="*{surname}" class="text-error"></span>
+      </div>
+
+      <div class="form-group">
+        <input required type="text" placeholder="Nazionalità"
+               th:field="*{nationality}" />
+        <span th:if="${#fields.hasErrors('nationality')}"
+              th:errors="*{nationality}" class="text-error"></span>
+      </div>
+
+      <div class="form-group">
+        <input required type="date" placeholder="Data di nascita"
+               th:field="*{birth}" />
+        <span th:if="${#fields.hasErrors('birth')}"
+              th:errors="*{birth}" class="text-error"></span>
+      </div>
+
+      <div class="form-group">
+        <input type="date" placeholder="Data di morte (opzionale)"
+               th:field="*{death}" />
+      </div>
+
+      <div class="form-group">
+        <label class="file-label">Immagine autore (opzionale)</label>
+        <input type="file" name="authorImage"
+               accept="image/*" />
+      </div>
+
+      <!-- ricerca e select libri -->
+      <div class="form-group">
+        <input type="text"
+               class="form-filter"
+               placeholder="Cerca un libro..."
+               data-target="books"/>
+        <select multiple id="books" th:field="*{books}"
+                class="form-select" size="6">
+          <option th:each="book : ${allBooks}"
+                  th:value="${book.id}"
+                  th:text="${book.titolo + ' (' + book.annoPubblicazione + ')'}">
+          </option>
         </select>
-        <div class="form-text">Tieni premuto Ctrl (o Cmd) per selezionare più libri.</div>
+        <div class="form-text">
+          Tieni premuto Ctrl (o Cmd) per selezionare più libri.
+        </div>
       </div>
 
-      <button type="submit" class="btn btn-primary">Salva Autore</button>
-      <a th:href="@{/authors}" class="btn btn-secondary">Annulla</a>
+      <div class="form-group">
+        <button type="submit">Conferma</button>
+      </div>
+      <div class="cancel-link">
+        <a th:href="@{/authors}">Annulla</a>
+      </div>
     </form>
   </div>
 

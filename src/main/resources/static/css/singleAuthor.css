@@ -1,100 +1,108 @@
-/* singleBook.css */
-
-/* 1) sposta tutto il contenuto sotto la navbar (10% di viewport height) */
+/* 1) Sposta tutto sotto la navbar */
 .content {
   margin-top: 10vh;
 }
 
-/* 2) Sezione libro */
-.book {
+/* 2) Sezione Autore */
+.author {
   padding: 2rem 4rem;
   width: 100vw;
   min-height: 60vh;
 }
 
-.book h2 {
+.author h2 {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
 
-.book p {
+.author p {
   font-size: 1.1rem;
   margin-bottom: 1rem;
 }
 
-/* 3) Galleria immagini (Flexbox) */
-.image-gallery {
+/* Immagine dell'Autore */
+.author-image {
   padding: 2rem 0;
 }
 
-.image-gallery h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: #fff;
-}
-
-.image-gallery .images {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.image-gallery .images img {
-  width: 150px;
-  height: auto;
+.author-image img {
+  max-width: 200px;
+  width: 100%;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
 }
 
-.image-gallery .images img:hover {
+.author-image img:hover {
   transform: scale(1.05);
 }
 
-/* 4) Sezione recensioni */
-.reviews {
-  padding: 2rem 4rem;
-  background-color: rgba(0, 0, 0, 0.6);
-  width: 100vw;
-  min-height: 20vh;
+/* 3) Sezione Libri */
+.books-section {
+  margin-top: 3rem;
 }
 
-.reviews h3 {
+.books-section h3 {
   font-size: 1.8rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
 }
 
-.review {
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 1rem;
+/* Container flessibile per le card dei libri */
+.books-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 
-.review h4 {
-  font-size: 1.3rem;
-  color: #ffd700;
+/* Singola card libro */
+.book-card {
+  width: 180px;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
-.review p {
+.book-card:hover {
+  transform: translateY(-4px);
+}
+
+.book-card a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+
+.book-card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.book-card:hover img {
+  transform: scale(1.05);
+}
+
+.book-info {
+  padding: 1rem;
+  text-align: center;
+}
+
+.book-info h4 {
   font-size: 1rem;
   margin-bottom: 0.5rem;
+  color: #343a40;
 }
 
-em {
-  color: #ccc;
+.book-info p {
+  font-size: 0.9rem;
+  color: #6c757d;
 }
 
-/* Nessuna recensione */
-.reviews + div {
-  padding: 0 4rem 2rem;
-  background-color: rgba(0, 0, 0, 0.6);
-  font-size: 1.1rem;
-  color: #999;
-}
-
-
-.delete-book[type="submit"] {
+.delete-author[type="submit"] {
     background-color: transparent;
     color: red;
     border: red solid 1px;
@@ -109,12 +117,12 @@ em {
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.delete-book[type="submit"]:hover {
+.delete-author[type="submit"]:hover {
   background-color: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-.modify-book{
+.modify-author{
     background-color: transparent;
     color: white;
     border: white solid 1px;
@@ -130,13 +138,13 @@ em {
     text-decoration: none;
 }
 
-.modify-book:hover {
+.modify-author:hover {
   background-color: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* contenitore flex per i bottoni */
-.book-actions {
+.author-actions {
   margin-top: 2rem;        /* spazio dal contenuto sopra */
   display: flex;
   gap: 1rem;               /* distanza orizzontale tra i bottoni */

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Trova tutti gli input di ricerca con la classe .list-filter
-  document.querySelectorAll('input.list-filter').forEach(input => {
+  // Trova tutti gli input di ricerca con la classe .form-filter
+  document.querySelectorAll('input.form-filter').forEach(input => {
     const targetId = input.dataset.target;            // es. "books" o "authors"
     const select   = document.getElementById(targetId);
     if (!select) return;

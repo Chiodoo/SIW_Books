@@ -2,61 +2,60 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Nuova Recensione</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <title>SiwBook - Nuova Recensione</title>
+    <link rel="stylesheet" href="/css/newReview.css" />
 </head>
 <body>
-<div class="container mt-4">
-    <h3>Lascia una recensione per: <span th:text="${book.titolo}">[Titolo Libro]</span></h3>
+    <div class="register-container">
+        <h2>Lascia una recensione per: <span th:text="${book.titolo}">[Titolo Libro]</span></h2>
+        <form th:action="@{'/logged/formNewReview/' + ${book.id}}"
+              th:object="${review}" method="post" enctype="multipart/form-data" class="register-card">
 
-    <form th:action="@{'/logged/formNewReview/' + ${book.id}}"
-          th:object="${review}" method="post" class="mt-3">
+            <!-- CSRF token -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-        <!-- CSRF token -->
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
-        <!-- Campo Titolo -->
-        <div class="mb-3">
-            <label for="titolo" class="form-label">Titolo recensione</label>
-            <input type="text"
-                   id="titolo"
-                   th:field="*{titolo}"
-                   class="form-control"
-                   placeholder="Es. Una lettura avvincente"/>
-            <div th:if="${#fields.hasErrors('titolo')}" class="text-danger mt-1">
-                <p th:errors="*{titolo}">Errore titolo</p>
+            <div class="form-group">
+                <input type="text"
+                       id="titolo"
+                       placeholder="Titolo recensione"
+                       required
+                       th:field="*{titolo}" />
+                <span th:if="${#fields.hasErrors('titolo')}"
+                      th:errors="*{titolo}"
+                      th:style="'color:red'"></span>
             </div>
-        </div>
 
-        <!-- Campo Testo -->
-        <div class="mb-3">
-            <label for="testo" class="form-label">Testo recensione</label>
-            <textarea id="testo"
-                      th:field="*{testo}"
-                      class="form-control"
-                      rows="6"
-                      placeholder="Scrivi qui la tua opinione…"></textarea>
-            <div th:if="${#fields.hasErrors('testo')}" class="text-danger mt-1">
-                <p th:errors="*{testo}">Errore testo</p>
+            <div class="form-group">
+                <textarea id="testo"
+                          placeholder="Scrivi qui la tua opinione…"
+                          required
+                          rows="6"
+                          th:field="*{testo}"></textarea>
+                <span th:if="${#fields.hasErrors('testo')}"
+                      th:errors="*{testo}"
+                      th:style="'color:red'"></span>
             </div>
-        </div>
 
-        <!-- Campo Voto -->
-        <div class="mb-3">
-            <label for="voto" class="form-label">Voto (0–5)</label>
-            <input type="number"
-                   id="voto"
-                   th:field="*{voto}"
-                   class="form-control"
-                   min="0" max="5" step="0.5"/>
-            <div th:if="${#fields.hasErrors('voto')}" class="text-danger mt-1">
-                <p th:errors="*{voto}">Errore voto</p>
+            <div class="form-group">
+                <input type="number"
+                       id="voto"
+                       placeholder="Voto (0–5)"
+                       required
+                       min="0" max="5" step="0.5"
+                       th:field="*{voto}" />
+                <span th:if="${#fields.hasErrors('voto')}"
+                      th:errors="*{voto}"
+                      th:style="'color:red'"></span>
             </div>
-        </div>
 
-        <!-- Pulsante di invio -->
-        <button type="submit" class="btn btn-primary">Invia recensione</button>
-    </form>
-</div>
+            <div class="form-group">
+                <button type="submit">Invia recensione</button>
+            </div>
+
+            <div class="login-link">
+                <p><a th:href="@{/books/{id}(id=${book.id})}">Torna al libro</a></p>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

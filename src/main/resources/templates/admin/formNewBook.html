@@ -2,50 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Nuovo Libro</title>
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <title>SiwBook - Nuovo Libro</title>
+  <link rel="stylesheet" href="/css/add-book.css" />
 </head>
 <body>
-  <div>
-    <a th:href="@{/}"><img th:src="@{/images/logo.png}" width="20%" alt="Logo"></a>
+  <div class="header-logo">
+    <a th:href="@{/}"><img th:src="@{/images/logo.png}" alt="Logo"></a>
   </div>
-  <div class="container mt-4">
+  <div class="book-container">
     <h2>Aggiungi un libro</h2>
-    <form th:action="@{/admin/book}" th:object="${book}" method="POST" enctype="multipart/form-data">
+    <form th:action="@{/admin/book}" th:object="${book}" method="POST" enctype="multipart/form-data" class="book-card">
       
       <!-- error globali -->
-      <p th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="text-danger"></p>
-      
-      <div class="mb-3">
-        <label class="form-label">Titolo:</label>
-        <input required type="text" th:field="*{titolo}" class="form-control">
-        <div th:if="${#fields.hasErrors('titolo')}" th:errors="*{titolo}" class="text-danger"></div>
+      <div class="form-group">
+        <p th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="text-error"></p>
       </div>
       
-      <div class="mb-3">
-        <label class="form-label">Anno pubblicazione:</label>
-        <input required type="text" th:field="*{annoPubblicazione}" class="form-control">
-        <div th:if="${#fields.hasErrors('annoPubblicazione')}" th:errors="*{annoPubblicazione}" class="text-danger"></div>
+      <div class="form-group">
+        <input required type="text" placeholder="Titolo" th:field="*{titolo}" />
+        <span th:if="${#fields.hasErrors('titolo')}" th:errors="*{titolo}" class="text-error"></span>
       </div>
       
-      <div class="mb-3">
-        <label class="form-label">Immagini del libro:</label>
-        <input type="file" name="bookImages" accept="image/*" multiple class="form-control">
+      <div class="form-group">
+        <input required type="text" placeholder="Anno di pubblicazione" th:field="*{annoPubblicazione}" />
+        <span th:if="${#fields.hasErrors('annoPubblicazione')}" th:errors="*{annoPubblicazione}" class="text-error"></span>
       </div>
       
-      <div class="mb-3">
-        <label class="form-label">Autori:</label>
-        <!-- campo di filtro -->
+      <div class="form-group">
+        <label class="file-label">Immagini del libro (opzionale)</label>
+        <input type="file" name="bookImages" accept="image/*" multiple />
+      </div>
+      
+      <div class="form-group">
         <input type="text"
-               class="form-control mb-2 list-filter"
+               class="form-filter"
                placeholder="Cerca un autore..."
                data-target="authors"/>
-        <!-- select multipla -->
-        <select multiple
-                id="authors"
-                class="form-select"
-                size="6"
-                th:field="*{authors}">
+        <select multiple id="authors" th:field="*{authors}" class="form-select" size="6">
           <option th:each="aut : ${allAuthors}"
                   th:value="${aut.id}"
                   th:text="${aut.name + ' ' + aut.surname}">
@@ -54,12 +47,15 @@
         <div class="form-text">Tieni premuto Ctrl (o Cmd) per selezionare più autori.</div>
       </div>
       
-      <button type="submit" class="btn btn-primary">Conferma</button>
-      <a th:href="@{/books}" class="btn btn-secondary">Annulla</a>
+      <div class="form-group">
+        <button type="submit">Conferma</button>
+      </div>
+      <div class="cancel-link">
+        <a th:href="@{/books}">Annulla</a>
+      </div>
     </form>
   </div>
-  
-  <!-- script per il filtro live sul select -->
+
   <script th:src="@{/js/filterList.js}"></script>
 </body>
 </html>

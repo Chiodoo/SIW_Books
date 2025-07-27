@@ -1,48 +1,63 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
     <title>Autore</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <meta charset="UTF-8" />
+    <title th:text="${author != null ? author.name + ' ' + author.surname : 'Autori'}">Autori</title>
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/singleAuthor.css" />
 </head>
+
 <body>
-    <div class="container mt-4">
-        <div>
-            <a href="/">
-                <img src="/images/logo.png" width="20%" alt="Logo">
-            </a>
-        </div>
+    <!-- Navbar -->
+    <div th:replace="fragments/navbar :: navbar"></div>
 
-        <!-- Mostra i dettagli dell'autore se esiste -->
-        <div th:if="${author}">
-            <h1 th:text="${author.name + ' ' + author.surname}">Nome Cognome</h1>
-            <div>Nazionalità: <span th:text="${author.nationality}">Nazionalità</span></div>
-            <div>Data di nascita: <span th:text="${#temporals.format(author.birth, 'dd/MM/yyyy')}">01/01/1900</span></div>
-            <div th:if="${author.death != null}">
-                Data di morte: <span th:text="${#temporals.format(author.death, 'dd/MM/yyyy')}">01/01/2000</span>
+    <main class="content">
+        <!-- Sezione Autore -->
+        <section class="author" th:if="${author}">
+            <h2 th:text="${author.name + ' ' + author.surname}">Nome Cognome</h2>
+            <p><strong>Nazionalità:</strong> <span th:text="${author.nationality}">Nazionalità</span></p>
+            <p><strong>Data di nascita:</strong>
+               <span th:text="${#temporals.format(author.birth, 'dd/MM/yyyy')}">01/01/1900</span>
+            </p>
+            <p th:if="${author.death != null}">
+                <strong>Data di morte:</strong>
+                <span th:text="${#temporals.format(author.death, 'dd/MM/yyyy')}">01/01/2000</span>
+            </p>
+
+            <!-- Immagine Autore -->
+            <div class="author-image" th:if="${author.image}">
+                <img th:src="@{/uploads/{file}(file=${author.image.path})}"
+                     alt="Foto di [[${author.name}]]" />
             </div>
 
-            <!-- Immagine autore -->
-            <div th:if="${author.image}">
-                <img th:src="@{/uploads/{file}(file=${author.image.path})}" class="img-fluid my-3" style="max-width:200px;" alt="Immagine autore" />
-            </div>
+            <!-- Libri dell'Autore -->
+            <section class="books-section" th:if="${author.books}">
+                <h3>Opere</h3>
+                <div class="books-list">
+                    <div class="book-card" th:each="book : ${author.books}">
+                        <a th:href="@{'/book/' + ${book.id}}">
+                        <!-- Se ci sono immagini -->
+                        <img th:if="${book.immagini != null and !book.immagini.isEmpty()}"
+                            th:src="@{'/uploads/' + ${book.immagini[0].path}}"
+                            alt="Copertina di [[${book.titolo}]]">
+                        <!-- Placeholder se non ci sono immagini -->
+                        <img th:if="${book.immagini == null or book.immagini.isEmpty()}"
+                            src="/images/default_book.jpg"
+                            alt="Nessuna immagine disponibile">
+                            <div class="book-info">
+                                <h4 th:text="${book.titolo}">Titolo libro</h4>
+                                <p th:text="${book.annoPubblicazione}">2000</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </section>
 
-            <!-- Lista libri dell'autore -->
-            <div th:if="${author.books}">
-                <h2>Opere</h2>
-                <ul class="list-group">
-                    <li class="list-group-item" th:each="book : ${author.books}">
-                        <a th:href="@{'/book' + '/' + ${book.id}}" th:text="${book.titolo}">Titolo libro</a>
-                        (<span th:text="${book.annoPubblicazione}">Anno</span>)
-                    </li>
-                </ul>
-            </div>
+        <div class="author" th:unless="${author}">
+            <p>Autore non esistente.</p>
         </div>
-
-        <!-- Messaggio se autore non esiste -->
-        <div th:unless="${author}">
-            <p>Autore non esistente</p>
-        </div>
-    </div>
+    </main>
 </body>
 </html>

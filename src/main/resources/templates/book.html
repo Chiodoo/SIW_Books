@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/base.css" />
     <link rel="stylesheet" href="/css/singleBook.css" />
     <link rel="stylesheet" href="/css/review.css" />
-    <link rel="stylesheet" href="/css/authors.css" />
+    <link rel="stylesheet" href="/css/authorsBook.css" />
     <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -19,13 +19,22 @@
 <body>
     <!-- navbar fissa -->
     <div th:replace="fragments/navbar :: navbar"></div>
-    <div th:replace="fragments/flash :: flash-messages"></div>
 
     <!-- wrapper per spostare sotto la navbar -->
     <main class="content">
         <section class="book" th:if="${book}">
             <h2 th:text="${book.titolo}">Titolo del libro</h2>
             <p><strong>Anno di pubblicazione:</strong> <span th:text="${book.annoPubblicazione}">2000</span></p>
+
+            <div class="image-gallery" th:if="${book.immagini}">
+                <h2>Galleria Immagini</h2>
+                <div class="images">
+                    <img th:each="img : ${book.immagini}"
+                         th:if="${img != null}"
+                         th:src="@{'/uploads/' + ${img.path}}"
+                         alt="Immagine libro"/>
+                </div>
+            </div>
 
             <section class="authors-section">
             <h3>Autori</h3>
@@ -47,16 +56,8 @@
             </div>
             </section>
 
-            <div class="image-gallery" th:if="${book.immagini}">
-                <h2>Galleria Immagini</h2>
-                <div class="images">
-                    <img th:each="img : ${book.immagini}"
-                         th:if="${img != null}"
-                         th:src="@{'/uploads/' + ${img.path}}"
-                         alt="Immagine libro"/>
-                </div>
-            </div>
             <!-- Fragment recensioni -->
+            <th:block th:insert="~{fragments/flash :: flash-messages}"/>
             <div th:insert="~{reviews :: reviewsFragment}"></div>
         </section>
 

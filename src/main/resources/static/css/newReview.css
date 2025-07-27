@@ -1,0 +1,99 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url('/images/background.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  width: 100vw;
+  min-height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.register-container {
+  padding: 2rem;
+  width: 35vw;
+  min-width: 400px;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 40px;
+  backdrop-filter: blur(10px);
+  border: white solid 1px;
+  margin: 2rem 0;
+}
+
+.register-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 20px;
+}
+
+.register-container h2 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 1.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+  color: rgba(255, 255, 255, 0.8);
+  background: transparent;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border: white solid 1px;
+  border-radius: 40px;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+button[type="submit"] {
+  background-color: transparent;
+  color: white;
+  border: white solid 1px;
+  padding: 1rem 1rem;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  font-size: 1rem;
+  width: 100%;
+  font-weight: bold;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.login-link a {
+  color: rgb(255, 0, 0);
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+  color: rgb(255, 255, 255);
+}
