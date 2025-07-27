@@ -1,0 +1,16 @@
+.review-button {
+  display: block;
+  margin: 0.5rem auto 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #ce5b5b;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.review-button:hover {
+  background-color: #944141;
+}

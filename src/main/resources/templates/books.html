@@ -3,15 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <title>Libri</title>
-    <link rel="stylesheet" href="/style.css?version=2" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/book.css" />
+    <link rel="stylesheet" href="/css/review.css" />
   </head>
 
   <body>
-    <div>
-      <a th:href="@{/}">
-        <img src="/images/logo.png" width="30%" alt="Logo" />
-      </a>
-    </div>
+    <div th:replace="fragments/navbar :: navbar"></div>
 
     <h1>Libri</h1>
 
@@ -34,7 +32,7 @@
       <button type="submit">🔍 Cerca</button>
     </form>
 
-    <!-- Pulsante Annulla ricerca, visibile solo se q o anno sono valorizzati -->
+    <!-- Pulsante Annulla ricerca -->
     <div th:if="${q != null or anno != null}" class="cancel-search">
       <a th:href="@{/books}" class="button">Annulla ricerca</a>
     </div>
@@ -44,27 +42,32 @@
       <p>Risultati trovati: <strong th:text="${count}"></strong></p>
     </div>
 
-    <!-- Messaggio di nessun risultato per i filtri -->
+    <!-- Messaggio di nessun risultato -->
     <div th:if="${message != null}" class="info" th:text="${message}"></div>
 
-    <!-- Se non è ricerca e la lista è vuota -->
-    <div th:if="${books.isEmpty()} and ${count == null}">
-      Non ci sono libri nel sistema
-    </div>
-
-    <!-- Lista dei libri -->
-    <ul>
-      <li th:each="book : ${books}">
-        <a
-          th:href="@{'/book/' + ${book.id}}"
-          th:text="${book.titolo} + ' (' + ${book.annoPubblicazione} + ')'"
-        ></a>
-        &nbsp;|&nbsp;
-        <a
-          th:href="@{'/logged/formNewReview/' + ${book.id}}"
-          >Lascia una recensione!</a
-        >
-      </li>
-    </ul>
+    <!-- Lista dei libri come card -->
+    <section class="books">
+      <div class="book-card" th:each="book : ${books}">
+        <a th:href="@{'/book/' + ${book.id}}">
+          <!-- Copertina se disponibile -->
+          <img th:if="${book.immagini != null and !book.immagini.isEmpty()}"
+               th:src="@{'/uploads/' + ${book.immagini[0].path}}"
+               alt="Copertina di [[${book.titolo}]]">
+          <!-- Placeholder -->
+          <img th:if="${book.immagini == null or book.immagini.isEmpty()}"
+               src="/images/default_book.jpg"
+               alt="Nessuna immagine disponibile">
+          <div class="title-overlay">
+            <h2 th:text="${book.titolo} + ' (' + ${book.annoPubblicazione} + ')'">
+              Titolo del libro
+            </h2>
+             <a th:href="@{'/logged/formNewReview/' + ${book.id}}"
+              class="review-button">
+              Lascia una recensione
+            </a>
+          </div>
+        </a>
+      </div>
+    </section>
   </body>
 </html>
