@@ -1,0 +1,118 @@
+/* /css/account.css */
+
+/* 1) sposta tutto il contenuto sotto la navbar (10% viewport height) */
+.content {
+  margin-top: 10vh;
+}
+
+/* 2) Container generale */
+.profile-container {
+  padding: 2rem 4rem;
+  width: 100vw;
+  min-height: 70vh;
+}
+
+/* 3) Card del profilo */
+.profile-card {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* 4) Sezione immagine */
+.img-section {
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* 5) Sezione dettagli */
+.details-section {
+  padding: 2rem;
+}
+
+.user-name {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.user-info {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+/* 6) Azioni (pulsanti) */
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.delete-account {
+  background-color: transparent;
+  color: red;
+  border: 1px solid rgba(255, 0, 0, 0.7);
+  padding: 0.75rem 1.25rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.delete-account:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+  border-color: red;
+}
+
+.modify-account {
+  display: inline-block;
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  padding: 0.75rem 1.25rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.modify-account:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+
+/* Messaggio utente non trovato */
+.no-users {
+  margin-top: 2rem;
+  text-align: center;
+  color: #fff;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 1rem;
+  }
+  .img-section,
+  .details-section {
+    text-align: center;
+  }
+  .actions {
+    flex-direction: column;
+  }
+}

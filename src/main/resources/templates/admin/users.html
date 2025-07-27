@@ -1,20 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
+    <meta charset="UTF-8" />
     <title>Utenti</title>
-    <link rel="stylesheet" href="/style.css?version=2" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/user.css" />
   </head>
 
   <body>
-      <div th:replace="fragments/flash :: flash-messages"></div>
-    <div><a href="/"><img src="/images/logo.png" width="10%"/></a></div>
-    <h1>Utenti</h1>
-    <div th:if="${users.isEmpty()}">Non ci utenti nel sistema</div>
-    <ul>
-      <li th:each="user: ${users}">
-        <a th:href="@{'/admin/user' + '/' + ${user.id}}"
-          th:text="${user.name} + ' ' + ${user.surname}">Up! (200)</a>
-      </li>
-    </ul>
+    <!-- Navbar comune -->
+    <div th:replace="fragments/adminNavbar :: navbarAdmin"></div>
+
+    <!-- Se non ci sono utenti -->
+    <div th:if="${users.isEmpty()}" class="no-users">
+      Non ci sono utenti nel sistema
+    </div>
+
+    <!-- Griglia di user-card -->
+    <section class="users" th:if="!${users.isEmpty()}">
+      <div class="user-card" th:each="user : ${users}">
+        <a th:href="@{'/admin/user/' + ${user.id}}">
+          <!-- Immagine se disponibile -->
+          <img th:if="${user.image != null}"
+               th:src="@{'/uploads/' + ${user.image.path}}"
+               alt="Immagine di [[${user.name}]]" />
+          <!-- Placeholder -->
+          <img th:if="${user.image == null}"
+               src="/images/default-profile.png"
+               alt="Immagine di default" />
+          <div class="info-overlay">
+            <h2 th:text="${user.name} + ' ' + ${user.surname}">Nome Cognome</h2>
+          </div>
+        </a>
+      </div>
+    </section>
   </body>
 </html>
