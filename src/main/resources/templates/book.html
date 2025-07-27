@@ -26,6 +26,16 @@
             <h2 th:text="${book.titolo}">Titolo del libro</h2>
             <p><strong>Anno di pubblicazione:</strong> <span th:text="${book.annoPubblicazione}">2000</span></p>
 
+            <div class="image-gallery" th:if="${book.immagini}">
+                <h2>Galleria Immagini</h2>
+                <div class="images">
+                    <img th:each="img : ${book.immagini}"
+                         th:if="${img != null}"
+                         th:src="@{'/uploads/' + ${img.path}}"
+                         alt="Immagine libro"/>
+                </div>
+            </div>
+
             <section class="authors-section">
             <h3>Autori</h3>
             <div class="authors-list">
@@ -46,15 +56,6 @@
             </div>
             </section>
 
-            <div class="image-gallery" th:if="${book.immagini}">
-                <h2>Galleria Immagini</h2>
-                <div class="images">
-                    <img th:each="img : ${book.immagini}"
-                         th:if="${img != null}"
-                         th:src="@{'/uploads/' + ${img.path}}"
-                         alt="Immagine libro"/>
-                </div>
-            </div>
             <!-- Fragment recensioni -->
             <th:block th:insert="~{fragments/flash :: flash-messages}"/>
             <div th:insert="~{reviews :: reviewsFragment}"></div>
