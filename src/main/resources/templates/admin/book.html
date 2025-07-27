@@ -1,75 +1,86 @@
+</html>
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title th:text="${book != null ? book.titolo + ' - Admin' : 'Libri'}">Libri</title>
-    <link rel="stylesheet" 
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <title th:text="${book != null ? book.titolo : 'Libri'}">Libri</title>
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/singleBook.css" />
+    <link rel="stylesheet" href="/css/review.css" />
+    <link rel="stylesheet" href="/css/authorsBook.css" />
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+    />
 </head>
 
 <body>
-    <div th:replace="fragments/flash :: flash-messages"></div>
-    <div class="container mt-4">
-        <a href="/"><img src="/images/logo.png" width="20%" alt="Logo"></a>
+    <!-- navbar fissa -->
+    <div th:replace="fragments/navbar :: navbar"></div>
 
-        <div class="mt-3 d-inline-block">
-            <!-- Link per visualizzare il form di modifica -->
-            <a th:href="@{/admin/editBook/{id}(id=${book.id})}" class="btn btn-primary">
-                <i class="bi bi-pencil"></i> Modifica libro
-            </a>
-        </div>
+    <!-- wrapper per spostare sotto la navbar -->
+    <main class="content">
+        <section class="book" th:if="${book}">
+            <h2 th:text="${book.titolo}">Titolo del libro</h2>
+            <p><strong>Anno di pubblicazione:</strong> <span th:text="${book.annoPubblicazione}">2000</span></p>
 
-        <div class="mt-3">
-            <form th:action="@{/admin/deleteBook/{id}(id=${book.id})}" method="post" onsubmit="return confirm('Sei sicuro di voler eliminare questo libro?');">
-                <!-- CSRF token, se usi Spring Security: -->
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <!-- override method -->
-                <input type="hidden" name="_method" value="delete"/>
-                <button type="submit" class="btn btn-danger">
-                <i class="bi bi-trash"></i> Elimina libro
-                </button>
-            </form>
-        </div>
-
-        <div th:if="${book != null}" class="mt-4">
-            <h1 th:text="${book.titolo}">Titolo libro</h1>
-            <p>Anno: <span th:text="${book.annoPubblicazione}">2000</span></p>
-
-            <div th:if="${book.authors != null and !#lists.isEmpty(book.authors)}">
-                <p>
-                    <strong>Autori:</strong>
-                    <span th:each="author,iterStat : ${book.authors}">
-                        <span th:text="${author.name + ' ' + author.surname}">Nome Cognome</span>
-                        <span th:if="${!iterStat.last}">, </span>
-                    </span>
-                </p>
-            </div>
-            <div th:unless="${book.authors != null and !#lists.isEmpty(book.authors)}">
-                <p>Non ci sono autori registrati per questo libro.</p>
-            </div>
-
-            <!-- Galleria Immagini -->
-            <div th:if="${book.immagini != null and book.immagini.size() > 0}" class="mt-3">
+            <div class="image-gallery" th:if="${book.immagini}">
                 <h2>Galleria Immagini</h2>
-                <div class="row">
-                    <div class="col-md-4 mb-3" th:each="img : ${book.immagini}">
-                        <img th:src="@{/uploads/{f}(f=${img.path})}"
-                             class="img-fluid rounded"
-                             alt="Immagine libro"/>
-                    </div>
+                <div class="images">
+                    <img th:each="img : ${book.immagini}"
+                         th:if="${img != null}"
+                         th:src="@{'/uploads/' + ${img.path}}"
+                         alt="Immagine libro"/>
                 </div>
             </div>
-            <div th:if="${book.immagini == null or book.immagini.size() == 0}" class="mt-3">
-                <p>Nessuna immagine disponibile per questo libro.</p>
+
+            <section class="authors-section">
+            <h3>Autori</h3>
+            <div class="authors-list">
+                <div class="author-card" th:each="author : ${book.authors}">
+                <a th:href="@{'/author/' + ${author.id}}">
+                    <img th:if="${author.image != null}"
+                        th:src="@{'/uploads/' + ${author.image.path}}"
+                        alt="Foto di [[${author.name}]]">
+                    <img th:if="${author.image == null}"
+                        src="/images/default_author.jpg"
+                        alt="Nessuna foto disponibile">
+                    <div class="name-overlay"
+                        th:text="${author.name + ' ' + author.surname}">
+                    Nome Cognome
+                    </div>
+                </a>
+                </div>
             </div>
+            </section>
+
+        <div class="book-actions">
+        <a th:href="@{/admin/editBook/{id}(id=${book.id})}" class="modify-book">
+            <i class="bi bi-pencil"></i> Modifica libro
+        </a>
+
+        <form th:action="@{/admin/deleteBook/{id}(id=${book.id})}"
+            method="post"
+            onsubmit="return confirm('Sei sicuro di voler eliminare questo libro e la sua immagine?');">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" name="_method" value="delete"/>
+        <button type="submit" class="delete-book">
+            <i class="bi bi-trash"></i> Elimina libro
+        </button>
+        </form>
         </div>
 
-        <div th:unless="${book != null}" class="mt-4">
-            <p>Libro non esistente</p>
-        </div>
 
-        <!-- Fragment recensioni -->
-        <div th:insert="~{reviews :: reviewsFragment}"></div>
-    </div>
+            <!-- Fragment recensioni -->
+            <th:block th:insert="~{fragments/flash :: flash-messages}"/>
+            <div th:insert="~{reviews :: reviewsFragment}"></div>
+        </section>
+
+        <div class="book" th:unless="${book}">
+            <p>Libro non trovato.</p>
+        </div>
+    </main>
 </body>
 </html>

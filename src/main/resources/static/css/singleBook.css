@@ -92,3 +92,53 @@ em {
   font-size: 1.1rem;
   color: #999;
 }
+
+
+.delete-book[type="submit"] {
+    background-color: transparent;
+    color: red;
+    border: red solid 1px;
+    padding: 1rem 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    font-size: 1rem;
+    width: auto;
+    font-weight: bold;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.delete-book[type="submit"]:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.modify-book{
+    background-color: transparent;
+    color: white;
+    border: white solid 1px;
+    padding: 1rem 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    font-size: 1rem;
+    width: auto;
+    font-weight: bold;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    text-decoration: none;
+}
+
+.modify-book:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* contenitore flex per i bottoni */
+.book-actions {
+  margin-top: 2rem;        /* spazio dal contenuto sopra */
+  display: flex;
+  gap: 1rem;               /* distanza orizzontale tra i bottoni */
+  flex-wrap: wrap;         /* su schermi stretti vanno a capo */
+}
