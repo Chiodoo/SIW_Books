@@ -1,0 +1,63 @@
+.books {
+  margin-top: 2rem;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1rem;
+}
+
+/* Card singola con overlay titolo */
+.book-card {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+}
+
+.book-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.book-card:hover img {
+  transform: scale(1.05);
+}
+
+.book-card .title-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 1rem 0.5rem;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  color: #fff;
+  text-align: center;
+}
+
+.book-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.book-card .title-overlay h2 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  font-weight: bold;
+  background: rgba(0,0,0,0.6);
+  padding: 0.5rem;
+  border-radius: 4px;
+  backdrop-filter: blur(2px);
+}

@@ -69,3 +69,67 @@ classDiagram
 
 
 ```
+
+# Casi d’Uso
+
+## Operazioni comuni
+- **UC1: Ricerca di un libro per titolo o anno di uscita**  
+  **Attori:** Utente registrato, Utente occasionale  
+  **Descrizione:**  
+  L’utente inserisce un titolo (o parte di esso) o un anno di pubblicazione, avvia la ricerca e visualizza la lista dei libri corrispondenti.
+
+- **UC2: Ricerca di un autore per nome o cognome**  
+  **Attori:** Utente registrato, Utente occasionale  
+  **Descrizione:**  
+  L’utente digita il nome o il cognome di un autore, lancia la ricerca e ottiene i dettagli degli autori trovati.
+
+---
+
+## Admin
+- **UC3: Cancellazione di un utente**  
+  **Attore principale:** Admin  
+  **Descrizione:**  
+  L’amministratore seleziona un utente dalla lista, conferma l’eliminazione e il sistema rimuove l’account (e tutti i dati correlati).
+
+- **UC4: Aggiunta di un nuovo libro**  
+  **Attore principale:** Admin  
+  **Descrizione:**  
+  L’admin compila i campi del libro (titolo, anno, descrizione...), associa uno o più autori esistenti o ne crea di nuovi, carica più immagini e conferma l’inserimento.
+
+- **UC5: Cancellazione di un libro**  
+  **Attore principale:** Admin  
+  **Descrizione:**  
+  L’admin sceglie un libro dall’elenco, conferma la rimozione e il sistema lo elimina definitivamente (insieme a eventuali recensioni).
+
+- **UC6: Aggiunta di un nuovo autore**  
+  **Attore principale:** Admin  
+  **Descrizione:**  
+  L’admin inserisce nome, cognome e bio dell’autore, può associare alcuni libri già presenti e caricare un’immagine, poi salva.
+
+- **UC7: Cancellazione di un autore**  
+  **Attore principale:** Admin  
+  **Descrizione:**  
+  L’admin seleziona un autore, conferma l’eliminazione e il sistema rimuove l’autore (eventuali libri restano, ma perdono il riferimento).
+
+- **UC8: Cancellazione di qualsiasi recensione**  
+  **Attore principale:** Admin  
+  **Descrizione:**  
+  L’admin individua una recensione (su un libro), conferma la rimozione e il sistema elimina la recensione.
+
+---
+
+## Utente registrato
+- **UC9: Aggiunta di una recensione a un libro**  
+  **Attore principale:** Utente registrato  
+  **Descrizione:**  
+  L’utente accede alla scheda di un libro, scrive la propria recensione (stella, commento…) e invia. Se ha già recensito quel libro, il sistema non permette un secondo invio.
+
+- **UC10: Cancellazione della propria recensione**  
+  **Attore principale:** Utente registrato  
+  **Descrizione:**  
+  L’utente trova la recensione che ha scritto, clicca “Elimina” e conferma: il sistema rimuove solo la sua recensione.
+
+---
+
+## Utente occasionale
+- Nessun caso d’uso specifico al di fuori delle **Operazioni comuni** (UC1, UC2).
