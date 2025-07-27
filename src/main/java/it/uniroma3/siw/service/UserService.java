@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Immagine;
 import it.uniroma3.siw.model.User;
-import it.uniroma3.siw.repository.CredentialsRepository;
 import it.uniroma3.siw.repository.UserRepository;
 import it.uniroma3.siw.service.storage.ImageStorageService;
 
@@ -23,9 +22,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private CredentialsRepository credentialsRepository;
 
     @Autowired
     private CredentialsService credentialsService;
@@ -68,7 +64,7 @@ public class UserService {
             }
 
             // 2) elimina manualmente le credentials collegate
-            credentialsRepository.deleteByUser_Id(id);
+            credentialsService.deleteCredentialsByUserId(id);
 
             // 3) elimina l’utente
             userRepository.delete(user);
