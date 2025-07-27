@@ -10,14 +10,15 @@ import it.uniroma3.siw.security.UserPrincipal;
 public class GlobalController {
 
     @ModelAttribute("userDetails")
-    public CurrentUserDTO currentUser(@AuthenticationPrincipal UserPrincipal principal) {
-        if (principal == null) return null;
+    public CurrentUserDTO currentUser(@AuthenticationPrincipal UserPrincipal self) {
+        if (self == null) return null;
         
     
     //Se l'utente è OAuth2, usa il displayName, altrimenti usa il nome utente
     return new CurrentUserDTO(
-        principal.isOAuth2() ? principal.getDisplayName() : principal.getUsername(),
-        principal.isOAuth2()
+        self.isOAuth2() ? self.getDisplayName() : self.getUsername(),
+        self.isOAuth2(),
+        self.getUserId()
     );
     }
 }

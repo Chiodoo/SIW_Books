@@ -24,6 +24,19 @@
             di <span th:text="|${rec.user.name} ${rec.user.surname}|">Autore</span>
           </small>
         </p>
+
+        <!--  Bottone di cancellazione visibile solo se sono l’autore  -->
+        <div th:if="${userDetails.userId} == ${rec.user.id}">
+          <form th:action="@{/logged/deleteReview/{bookId}/{reviewId}(bookId=${book.id},reviewId=${rec.id})}"
+                method="post">
+            <!-- Necessario per trasformare il POST in DELETE -->
+            <input type="hidden" name="_method" value="delete"/>
+            <button type="submit" class="btn btn-sm btn-danger">
+              Cancella questa recensione
+            </button>
+          </form>
+        </div>
+
       </div>
     </div>
   </div>
