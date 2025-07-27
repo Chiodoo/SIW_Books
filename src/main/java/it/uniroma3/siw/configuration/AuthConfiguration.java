@@ -51,7 +51,18 @@ public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception 
             .cors(cors -> cors.disable())
             .authorizeHttpRequests(requests -> requests
                 // Pagine pubbliche e risorse statiche
-                .requestMatchers(HttpMethod.GET, "/", "/index", "/register", "/login", "/css/**", "/images/**", "favicon.ico", "/js/**", "/webjars/**", "/book*/**","/author*/**","/uploads/**").permitAll()
+            .requestMatchers(HttpMethod.GET,
+                "/", "/index", "/register", "/login",
+                "/css/**", "/images/**", "/favicon.ico", "/js/**", "/webjars/**",
+                // qui i tuoi endpoint libri e autori
+                "/books",      // lista di tutti i libri
+                "/books/**",   // dettagli libro, ricerche, ecc.
+                "/book/**",    // eventuale alias singolare
+                "/authors",    // lista di tutti gli autori
+                "/authors/**", // dettagli autore, ricerche, ecc.
+                "/author/**",  // eventuale alias singolare
+                "/uploads/**"
+            ).permitAll()
                 // Registrazione e login aperti a tutti (POST)
                 .requestMatchers(HttpMethod.POST, "/register", "/login").permitAll()
                 // Area amministrativa solo per admin
