@@ -32,7 +32,7 @@
                 <h2>Opere</h2>
                 <ul class="list-group">
                     <li class="list-group-item" th:each="book : ${author.books}">
-                        <a th:href="@{'/admin/book' + '/' + ${book.id}}" th:text="${book.titolo}">Titolo libro</a>
+                        <a th:href="@{'/book' + '/' + ${book.id}}" th:text="${book.titolo}">Titolo libro</a>
                         (<span th:text="${book.annoPubblicazione}">Anno</span>)
                     </li>
                 </ul>

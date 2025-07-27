@@ -6,12 +6,11 @@
     <link rel="stylesheet" href="/css/base.css" />
     <link rel="stylesheet" href="/css/book.css" />
     <link rel="stylesheet" href="/css/review.css" />
+    <link rel="stylesheet" href="/css/search.css" />
   </head>
 
   <body>
     <div th:replace="fragments/navbar :: navbar"></div>
-
-    <h1>Libri</h1>
 
     <!-- Form di ricerca per titolo e anno -->
     <form method="get" th:action="@{/books/search}" class="search-form">
@@ -38,12 +37,14 @@
     </div>
 
     <!-- Conteggio risultati -->
-    <div th:if="${count != null}">
-      <p>Risultati trovati: <strong th:text="${count}"></strong></p>
-    </div>
+      <div class="result" th:if="${count != null}">
+        <p>Risultati trovati: <strong th:text="${count}"></strong></p>
+          <!-- Messaggio di nessun risultato -->
+          <div th:if="${message != null}" class="info" th:text="${message}"></div>
+      </div>
 
-    <!-- Messaggio di nessun risultato -->
-    <div th:if="${message != null}" class="info" th:text="${message}"></div>
+
+
 
     <!-- Lista dei libri come card -->
     <section class="books">

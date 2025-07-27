@@ -1,0 +1,94 @@
+/* singleBook.css */
+
+/* 1) sposta tutto il contenuto sotto la navbar (10% di viewport height) */
+.content {
+  margin-top: 10vh;
+}
+
+/* 2) Sezione libro */
+.book {
+  padding: 2rem 4rem;
+  width: 100vw;
+  min-height: 60vh;
+}
+
+.book h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.book p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+/* 3) Galleria immagini (Flexbox) */
+.image-gallery {
+  padding: 2rem 0;
+}
+
+.image-gallery h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.image-gallery .images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.image-gallery .images img {
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.image-gallery .images img:hover {
+  transform: scale(1.05);
+}
+
+/* 4) Sezione recensioni */
+.reviews {
+  padding: 2rem 4rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100vw;
+  min-height: 20vh;
+}
+
+.reviews h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.review {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 1rem;
+}
+
+.review h4 {
+  font-size: 1.3rem;
+  color: #ffd700;
+}
+
+.review p {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+em {
+  color: #ccc;
+}
+
+/* Nessuna recensione */
+.reviews + div {
+  padding: 0 4rem 2rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  font-size: 1.1rem;
+  color: #999;
+}

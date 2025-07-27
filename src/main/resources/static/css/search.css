@@ -1,0 +1,70 @@
+.search-form {
+  margin-top: 10rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+
+}
+.search-form input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 300px;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* bordo sottile e leggero */
+  border-radius: 20px;
+  background-color: transparent;
+  color: white;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.search-form input:focus {
+  background-color: rgba(255, 255, 255, 0.1); /* più scuro dello sfondo */
+  box-shadow: 0 0 5px rgba(224, 194, 0, 0.5); /* leggera ombra per evidenziare il focus */
+  border-color: rgba(224, 194, 0, 0.5); /* bordo più luminoso al focus */
+}
+
+.search-form button {
+  padding: 0.5rem 1rem;
+  background-color: rgba(255, 255, 255, 0.1); /* più scuro dello sfondo */
+  color: white;
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.search-form button:hover {
+  background-color: #e0c200;
+}
+
+.cancel-search {
+    display: block;
+    margin: 1rem auto;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-search:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cancel-search a {
+    color: inherit; /* mantiene il colore del link */
+    text-decoration: none; /* rimuove la sottolineatura */
+}
+
+.result {
+  text-align: center;
+  margin-top: 1rem;
+  color: #fff;
+}
