@@ -1,0 +1,64 @@
+.authors-section {
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+/* Titolo "Autori" allineato a sinistra sopra le card */
+.authors-section h3 {
+  text-align: left;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+/* Container flessibile per le card degli autori */
+.authors-list {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* Singola card autore */
+.author-card {
+  width: 200px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  background: #ffffff;
+}
+
+.author-card:hover {
+  transform: translateY(-4px);
+}
+
+.author-card a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Immagine autore con zoom su hover */
+.author-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.author-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Nome autore sotto l'immagine */
+.name-overlay {
+  padding: 0.75rem 0;
+  text-align: center;
+  background: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333333;
+}

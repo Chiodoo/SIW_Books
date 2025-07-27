@@ -1,6 +1,6 @@
 .main-content {
   flex: 1;
-  margin-top: 70px; /* altezza navbar */
+  margin-top: 10%; /* altezza navbar */
   display: flex;
   flex-direction: column;
   align-items: center;

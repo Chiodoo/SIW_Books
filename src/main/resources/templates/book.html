@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/base.css" />
     <link rel="stylesheet" href="/css/singleBook.css" />
     <link rel="stylesheet" href="/css/review.css" />
+    <link rel="stylesheet" href="/css/authors.css" />
     <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -26,16 +27,25 @@
             <h2 th:text="${book.titolo}">Titolo del libro</h2>
             <p><strong>Anno di pubblicazione:</strong> <span th:text="${book.annoPubblicazione}">2000</span></p>
 
-            <p>
-                <strong>Autori:</strong>
-                <span th:each="author,iterStat : ${book.authors}">
-                    <a th:href="@{'/author/' + ${author.id}}"
-                       th:text="${author.name + ' ' + author.surname}">
-                       Nome Cognome
-                    </a>
-                    <span th:if="${!iterStat.last}">, </span>
-                </span>
-            </p>
+            <section class="authors-section">
+            <h3>Autori</h3>
+            <div class="authors-list">
+                <div class="author-card" th:each="author : ${book.authors}">
+                <a th:href="@{'/author/' + ${author.id}}">
+                    <img th:if="${author.image != null}"
+                        th:src="@{'/uploads/' + ${author.image.path}}"
+                        alt="Foto di [[${author.name}]]">
+                    <img th:if="${author.image == null}"
+                        src="/images/default_author.jpg"
+                        alt="Nessuna foto disponibile">
+                    <div class="name-overlay"
+                        th:text="${author.name + ' ' + author.surname}">
+                    Nome Cognome
+                    </div>
+                </a>
+                </div>
+            </div>
+            </section>
 
             <div class="image-gallery" th:if="${book.immagini}">
                 <h2>Galleria Immagini</h2>
