@@ -2,17 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <title>Autori - Admin</title>
-    <link rel="stylesheet" href="/style.css?version=2" />
+    <title>Autori</title>
+
+    <!-- Stili base e specifici -->
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/search.css" />
+    <link rel="stylesheet" href="/css/author.css" />
   </head>
 
   <body>
-      <div th:replace="fragments/flash :: flash-messages"></div>
-    <div>
-      <a href="/"><img src="/images/logo.png" width="30%" alt="Logo" /></a>
-    </div>
-
-    <h1>Autori</h1>
+    <div th:replace="fragments/adminNavbar :: navbarAdmin"></div>
 
     <!-- Form di ricerca per nome o cognome -->
     <form method="get" th:action="@{/authors/search}" class="search-form">
@@ -31,26 +30,37 @@
     </div>
 
     <!-- Conteggio risultati -->
-    <div th:if="${count != null}">
+    <div class="result" th:if="${count != null}">
       <p>Risultati trovati: <strong th:text="${count}"></strong></p>
+      <!-- Messaggio di nessun risultato -->
+      <div th:if="${message != null}" class="info" th:text="${message}"></div>
     </div>
 
-    <!-- Messaggio di nessun risultato -->
-    <div th:if="${message != null}" class="info" th:text="${message}"></div>
-
     <!-- Se non è ricerca e la lista è vuota -->
-    <div th:if="${authors.isEmpty()} and ${count == null}">
+    <div th:if="${authors.isEmpty()} and ${count == null}" class="info">
       Non ci sono autori nel sistema
     </div>
 
     <!-- Lista autori -->
-    <ul>
-      <li th:each="author : ${authors}">
-        <a th:href="@{'/author/' + ${author.id}}"
-           th:text="${author.name} + ' ' + ${author.surname}">
-          Nome Cognome
-        </a>
-      </li>
-    </ul>
+      <section class="authors">
+            <div class="author-card" th:each="author : ${authors}">
+                <a th:href="@{'/author' + '/'+ ${author.id}}">
+                    <!--Mostra l'immagine se esiste-->
+                    <img th:if="${author.image != null and author.image.path != null}"
+                        th:src="@{'/uploads/' + ${author.image.path}}"
+                        alt="Foto di [[${author.title}]]"
+                        class="author-image">
+                    <!--Immagine placeholder se nessuna immagine è presente-->
+                    <img th:if="${author.image == null or author.image.path == null}"
+                        src="/images/default_author.jpg"
+                        alt="Nessuna immagine disponibile"
+                        class="author-image">
+                    <!--Overlay con nome e cognome dell'autore-->
+                    <div class="name-overlay">
+                        <h2 th:text="${author.name + ' ' + author.surname}"></h2>
+                    </div>
+                </a>
+            </div>
+        </section>
   </body>
 </html>
