@@ -167,4 +167,8 @@ public class BookService {
         return bookRepository.save(book);
     }
 
+    public List<Book> get3RandomBooks() {
+        return bookRepository.find3RandomBooks();
+    }
+
 }
