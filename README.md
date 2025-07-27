@@ -65,7 +65,7 @@ classDiagram
   Book "1" -- "*" Immagine
   User -- "1" Immagine
   Author -- "1" Immagine
-  
+  User -- Recensione
 
 
 ```

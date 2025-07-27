@@ -5,6 +5,7 @@ import it.uniroma3.siw.service.storage.exception.FileTooLargeException;
 import it.uniroma3.siw.service.storage.exception.UnsupportedFileTypeException;
 import org.apache.tika.Tika;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -75,5 +76,16 @@ public class ImageStorageService {
         }
 
         return subdir + "/" + filename;
+    }
+
+    /**
+     * Elimina ricorsivamente la cartella e tutti i file contenuti,
+     * a partire dal subdir relativo (es. "books/42").
+     */
+    public void deleteDirectory(String subdir) throws IOException {
+        Path dir = baseDir.resolve(subdir);
+        if (Files.exists(dir)) {
+            FileSystemUtils.deleteRecursively(dir);
+        }
     }
 }

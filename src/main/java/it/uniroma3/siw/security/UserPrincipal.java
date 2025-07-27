@@ -91,11 +91,6 @@ public class UserPrincipal implements UserDetails, OidcUser {
         return oauth2;
     }
 
-    /** alias (for templates) */
-    public boolean isOauth2() {
-        return oauth2;
-    }
-
     // --- UserDetails interface ---
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

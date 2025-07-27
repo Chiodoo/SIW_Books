@@ -25,6 +25,13 @@
             </form>
         </div>
 
+        <div class="mt-3 d-inline-block">
+            <!-- Link per visualizzare il form di modifica -->
+            <a th:href="@{/admin/editAuthor/{id}(id=${author.id})}" class="btn btn-primary">
+                <i class="bi bi-pencil"></i> Modifica autore
+            </a>
+        </div>
+
         <!-- Mostra i dettagli dell'autore se esiste -->
         <div th:if="${author}">
             <h1 th:text="${author.name + ' ' + author.surname}">Nome Cognome</h1>
