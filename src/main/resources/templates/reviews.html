@@ -31,7 +31,7 @@
         </p>
 
         <!-- 1) Utenti normali: possono cancellare SOLO le proprie recensioni -->
-        <div th:if="${!userDetails.admin} and (${userDetails.userId} == ${rec.user.id})">
+        <div th:if="${userDetails != null and !userDetails.admin and userDetails.userId == rec.user.id}">
           <form th:action="@{/logged/deleteReview/{bookId}/{reviewId}
                            (bookId=${book.id}, reviewId=${rec.id})}"
                 method="post">
@@ -43,7 +43,7 @@
         </div>
 
         <!-- 2) Admin: può cancellare QUALSIASI recensione -->
-        <div th:if="${userDetails.admin}">
+        <div th:if="${userDetails != null and userDetails.admin}">
           <form th:action="@{/admin/deleteReview/{bookId}/{reviewId}
                            (bookId=${book.id}, reviewId=${rec.id})}"
                 method="post">
