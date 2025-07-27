@@ -11,55 +11,32 @@
 
 
   <body>
-    <nav class="navbar"> 
-      <div class="logo"><a th:href="@{/}"><img src="/images/logo.png" alt="Logo SIW Books"></a></div>
-      <ul class="nav-links">
-        <li><a href="/books">Visualizza libri</a></li>
-        <li><a href="/authors">Visualizza autori</a></li>
-        <li th:unless="${userDetails}">
-          <a href="/login">Login</a>
-        </li>
-        <li th:unless="${userDetails}">
-          <a href="/register">Registrati</a>
-        </li>
-        <li th:if="${userDetails}">
-          <a th:href="@{/logged/account}" th:text="${userDetails.username}"></a>
-        </li>
-        <li th:if="${userDetails}">
-          <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Logout</a>
-          <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-          </form>
-        </li>
-      </ul>
-    </nav>
+    <div th:replace="fragments/navbar :: navbar"></div>
 
     <div class="main-content">
       <div class="intro-text">
         <h1>Benvenuto su SIW-Books</h1>
         <h3>Ecco degli esempi direttamente dalla nostra libreria</h3>
       </div>
-      <section class="books">
-              <div class="book-card" th:each="book : ${randomBooks}">
-                  <a th:href="@{'/book' + '/'+ ${book.id}}">
-                      <!-- Mostra la prima immagine se esiste -->
-                      <img th:if="${book.immagini != null and !book.immagini.isEmpty()}"
-                          th:src="@{'/uploads/' + ${book.immagini[0].path}}"
-                          alt="Copertina di [[${book.titolo}]]"
-                          class="book-image">
-
-                      <!-- Immagine placeholder se nessuna immagine è presente -->
-                      <img th:if="${book.immagini == null or book.immagini.isEmpty()}"
-                          src="/images/default_book.jpg"
-                          alt="Nessuna immagine disponibile"
-                          class="book-image">
-
-                      <h2 th:text="${book.titolo}">Titolo del libro</h2>
-                      <p th:text="${book.annoPubblicazione}">Anno di pubblicazione</p>
-                  </a>
+        <section class="books">
+          <div class="book-card" th:each="book : ${randomBooks}">
+            <a th:href="@{'/book/' + ${book.id}}">
+              <!-- Se ci sono immagini -->
+              <img th:if="${book.immagini != null and !book.immagini.isEmpty()}"
+                  th:src="@{'/uploads/' + ${book.immagini[0].path}}"
+                  alt="Copertina di [[${book.titolo}]]">
+              <!-- Placeholder se non ci sono immagini -->
+              <img th:if="${book.immagini == null or book.immagini.isEmpty()}"
+                  src="/images/default_book.jpg"
+                  alt="Nessuna immagine disponibile">
+              <div class="title-overlay">
+                <h2 th:text="${book.titolo} + ' (' + ${book.annoPubblicazione} + ')'">Titolo del libro</h2>
               </div>
-          </section>
-          <button>Scopri tutti i libri che abbiamo disponibili</button>
+            </a>
+          </div>
+        </section>
+
+          <button onclick="window.location.href='/books'" class="discover-button">Scopri tutti i libri che abbiamo disponibili</button>
       </div>
 
     <div th:replace="fragments/flash :: flash-messages"></div>
