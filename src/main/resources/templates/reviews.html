@@ -11,7 +11,7 @@
       <p class="text-muted">Nessuna recensione disponibile.</p>
     </div>
 
-    <div th:each="rec : ${reviews}" class="card mb-3">
+    <div th:each="rec : ${reviews}" class="card review-card mb-3">
       <div class="card-body">
         <h5 class="card-title" th:text="${rec.titolo}">Titolo recensione</h5>
           <h6 class="card-subtitle mb-2 text-muted">
@@ -36,7 +36,7 @@
                            (bookId=${book.id}, reviewId=${rec.id})}"
                 method="post">
             <input type="hidden" name="_method" value="delete"/>
-            <button type="submit" class="btn btn-sm btn-danger">
+            <button type="submit" class="delete-review">
               Cancella questa recensione
             </button>
           </form>
@@ -48,7 +48,7 @@
                            (bookId=${book.id}, reviewId=${rec.id})}"
                 method="post">
             <input type="hidden" name="_method" value="delete"/>
-            <button type="submit" class="btn btn-sm btn-danger">
+            <button type="submit" class="delete-review">
               Cancella (admin)
             </button>
           </form>
