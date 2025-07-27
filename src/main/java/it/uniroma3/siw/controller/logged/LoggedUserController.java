@@ -74,7 +74,13 @@ public class LoggedUserController {
     }
 
     @GetMapping("/account/edit")
-    public String editUserForm(@AuthenticationPrincipal UserPrincipal self, Model model) {
+    public String editUserForm(@AuthenticationPrincipal UserPrincipal self, Model model, RedirectAttributes redirectAttrs) {
+
+        if(self.isOAuth2()) {
+            redirectAttrs.addFlashAttribute("error", "Non puoi modificare il profilo OAuth2");
+            return "redirect:/logged/account";
+        }
+
         Long userId = self.getUserId();
         User user = this.userService.getUserById(userId);
         Credentials credentials = this.credentialsService.getCredentials(userId);
@@ -97,6 +103,7 @@ public class LoggedUserController {
             Model model,
             RedirectAttributes redirectAttrs
     ) throws IOException {
+
         Long userId = self.getUserId();
 
         if (uErr.hasErrors() || cErr.hasErrors()) {
