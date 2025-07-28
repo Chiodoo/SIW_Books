@@ -57,6 +57,10 @@ public class CredentialsService {
      * al primo lookup.
      */
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(cacheNames = "credenzialiByUsername", key = "#credentials.username"),
+        @CacheEvict(cacheNames = "credenzialiById",       key = "#result.user.id") // se hai già l’ID
+    })
     public Credentials saveCredentials(Credentials credentials) {
         if (credentials.getRole() == null) {
             credentials.setRole(Credentials.DEFAULT_ROLE);
