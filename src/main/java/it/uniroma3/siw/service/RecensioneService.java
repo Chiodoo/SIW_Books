@@ -37,6 +37,7 @@ public class RecensioneService {
         this.recensioneRepository.save(recensione);
     }
 
+    //Metodi sovraccaricati per verificare se l'utente ha già recensito il libro
     public boolean hasRecensito(User user, Book book) {
         return this.recensioneRepository.existsByUserAndBook(user, book);
     }
