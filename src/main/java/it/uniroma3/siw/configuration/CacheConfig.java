@@ -17,10 +17,10 @@ public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager cm = new CaffeineCacheManager("credenzialiByUsername", "credenzialiById");
+        CaffeineCacheManager cm = new CaffeineCacheManager("credenzialiByUsername", "credenzialiById"); // Due cache distinte per le credenziali, indicizzate per username e id
         cm.setCaffeine(Caffeine.newBuilder()
-            .maximumSize(1000)
-            .expireAfterAccess(30, TimeUnit.MINUTES)
+            .maximumSize(1000)      // Numero massimo di elementi nella cache
+            .expireAfterAccess(30, TimeUnit.MINUTES) // Tempo di scadenza dopo l'ultimo accesso
         );
         return cm;
     }

@@ -16,7 +16,7 @@ import it.uniroma3.siw.service.CredentialsService;
 import it.uniroma3.siw.service.UserService;
 
 @Service
-public class CustomOidcUserService extends OidcUserService {
+public class CustomOidcUserService extends OidcUserService {        //OIDC = OpenID Connect. Fornisce identificazione e autenticazione degli utenti
 
     @Autowired
     private UserService userService;

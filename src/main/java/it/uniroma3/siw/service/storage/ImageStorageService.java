@@ -18,7 +18,8 @@ import java.util.UUID;
 public class ImageStorageService {
 
     private static final long MAX_SIZE = 30 * 1_048_576; // 30 MB
-    // aggiunto image/webp
+
+    // Tipi MIME supportati
     private static final List<String> ALLOWED_MIME = List.of(
         "image/png",
         "image/jpeg",
@@ -26,7 +27,8 @@ public class ImageStorageService {
     );
 
     private final Path baseDir;
-    private final Tika tika;
+    private final Tika tika;    // Per rilevare i tipi MIME reali
+    // Un tipo MIME è una stringa standard che descrive il tipo di un file o contenuto (in una risposta HTTP, ad esempio)
 
     public ImageStorageService(UploadProperties props) {
         this.baseDir = Paths.get(props.getBaseDir());

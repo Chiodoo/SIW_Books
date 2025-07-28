@@ -74,7 +74,7 @@
 
 
             <!-- Fragment recensioni -->
-            <th:block th:insert="~{fragments/flash :: flash-messages}"/>
+            <div th:replace="fragments/flash :: flash-messages"></div>
             <div th:insert="~{reviews :: reviewsFragment}"></div>
         </section>
 

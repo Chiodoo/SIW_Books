@@ -31,7 +31,7 @@ public class AuthConfiguration {
 @Autowired
 public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     auth
-      .userDetailsService(userDetailsService)
+      .userDetailsService(userDetailsService)   // Per caricare gli utenti da una origine personalizzata
       .passwordEncoder(passwordEncoder());
 }
     
@@ -86,13 +86,13 @@ public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception 
                 .clearAuthentication(true)
                 .permitAll()
             )
-            .oauth2Login(oauth2 -> oauth2
+            .oauth2Login(oauth2 -> oauth2               // Attivazione del login OAuth2
           .loginPage("/login")
-          .userInfoEndpoint(endpoints -> endpoints
+          .userInfoEndpoint(endpoints -> endpoints      // Configurazione dei servizi per ottenere le informazioni utente
               // per OAUTH2 puro (GitHub, Facebook…)
-              .userService(customOAuth2UserService)
+              .userService(customOAuth2UserService)     // Specifica un servizio custom per gestire i dati dell'utente OAuth2 puro (Github, Facebook…)
               // per OIDC (Google, Azure AD…)
-              .oidcUserService(customOidcUserService))
+              .oidcUserService(customOidcUserService))  // Specifica un servizio custom per gestire i dati dell'utente OIDC (Google, Azure AD…)
           .defaultSuccessUrl("/success", true)
         );
 

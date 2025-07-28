@@ -90,6 +90,10 @@ public class CredentialsService {
     }
 
     
+    /**
+     * Elimina le credenziali associate a un utente.
+     * Invalida la cache per username e userId.
+     */
     @Transactional
     @Caching(evict = {
     @CacheEvict(cacheNames = "credenzialiByUsername", allEntries = true),

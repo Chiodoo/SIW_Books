@@ -27,7 +27,7 @@ public class IndexController {
     }
 
     @GetMapping("/success")
-    public String defaultAfterLogin(@AuthenticationPrincipal UserPrincipal self, Model model) {
+    public String defaultAfterLogin() {
         return "redirect:/";
     }
 }

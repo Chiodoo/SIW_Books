@@ -95,7 +95,8 @@ public class BookService {
         if (hasAnno) {
             return bookRepository.findByAnnoPubblicazione(anno);
         }
-        // nessun filtro: tutti i libri
+        // se non ho filtri, restituisco tutti i libri
+        // (Trasformazione dell'iterable in una List)
         return StreamSupport
                  .stream(bookRepository.findAll().spliterator(), false)
                  .collect(Collectors.toList());

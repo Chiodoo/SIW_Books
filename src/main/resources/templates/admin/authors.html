@@ -41,6 +41,8 @@
       Non ci sono autori nel sistema
     </div>
 
+    <div th:replace="fragments/flash :: flash-messages"></div>
+
     <!-- Lista autori -->
       <section class="authors">
             <div class="author-card" th:each="author : ${authors}">

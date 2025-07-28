@@ -45,7 +45,7 @@
 
 
 
-
+    <div th:replace="fragments/flash :: flash-messages"></div>
     <!-- Lista dei libri come card -->
     <section class="books">
       <div class="book-card" th:each="book : ${books}">

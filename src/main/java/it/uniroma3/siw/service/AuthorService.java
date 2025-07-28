@@ -46,7 +46,10 @@ public class AuthorService {
     public Author createAuthorWithBooksAndImage(Author author,
                                                 List<Long> bookIds,
                                                 MultipartFile image) throws IOException {
-        author = authorRepository.save(author);
+
+        author = authorRepository.save(author);     //Per generare l'ID dell'autore
+
+        // 1) Associa l'immagine all'autore
         if (image != null && !image.isEmpty()) {
             String path = imageStorageService.store(image, "authors/" + author.getId());
             Immagine immagine = new Immagine();
@@ -54,6 +57,8 @@ public class AuthorService {
             author.setImage(immagine);
             author = authorRepository.save(author);
         }
+
+        // 2) Associa i libri all'autore
         if (bookIds != null) {
             for (Long bookId : bookIds) {
                 Book book = bookRepository.findById(bookId).orElse(null);
@@ -80,9 +85,9 @@ public class AuthorService {
 
     @Transactional
     public boolean deleteAuthorWithImage(Long id) {
-        return authorRepository.findById(id).map(author -> {
+        return authorRepository.findById(id).map(author -> {        //Restituisce true se l'autore è stato eliminato con successo oppure salta il procedimento se non esiste
 
-            // 1) cancello la cartella immagini
+            // 1) cancello la cartella immagini dell'autore
             try {
                 imageStorageService.deleteDirectory("authors/" + author.getId());
             } catch (IOException e) {
@@ -95,7 +100,7 @@ public class AuthorService {
             }
             author.getBooks().clear();
 
-            // 3) cancello l'autore (le righe in book_author ora non esistono più)
+            // 3) cancello l'autore
             authorRepository.delete(author);
             return true;
         }).orElse(false);

@@ -37,7 +37,7 @@ public class LoggedReviewController {
 
     //Mostra il form solo se l'utente è autenticato e non ha già recensito il libro
     @GetMapping("/formNewReview/{id}")
-    public String formNewReview(@AuthenticationPrincipal UserPrincipal self,@PathVariable("id") Long id, Model model,RedirectAttributes redirectAttr) {
+    public String formNewReview(@AuthenticationPrincipal UserPrincipal self, @PathVariable("id") Long id, Model model, RedirectAttributes redirectAttr) {
         Book book = this.bookService.findById(id);
         Long userId = self.getUserId();
 
@@ -98,8 +98,8 @@ public class LoggedReviewController {
             @PathVariable Long bookId,
             @PathVariable Long reviewId,
             RedirectAttributes redirectAttr,
-            @AuthenticationPrincipal UserPrincipal self // la tua UserDetails con getUserId()
-    ) {
+            @AuthenticationPrincipal UserPrincipal self) {      //UserDetails con getUserId()
+
         // 1) Recupera la recensione
         Optional<Recensione> maybeReview = recensioneService.findById(reviewId);
         if (maybeReview.isPresent()) {
