@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.Immagine;
@@ -46,6 +47,7 @@ public class AuthenticationController {
         @Valid @ModelAttribute("credentials") Credentials credentials,
         BindingResult credentialsBindingResult,
         @RequestParam("profileImage") MultipartFile profileImage,
+        RedirectAttributes redirectAttrs,
         Model model) throws IOException {
 
         if (userBindingResult.hasErrors() || credentialsBindingResult.hasErrors()) {
@@ -64,10 +66,23 @@ public class AuthenticationController {
             userService.saveUser(user);
         }
 
+        redirectAttrs.addAttribute("id", user.getId());
+        return "redirect:/registrationSuccessful";
+    }
+
+    @GetMapping("/registrationSuccessful")
+    public String showRegistrationSuccessful(@RequestParam("id") Long id, Model model) {
+
+        /* 1. Ricarica l’utente dal DB (stateless, no sessione) */
+        User user = userService.getUserById(id);            // CrudRepository::findById
+
+        /* 2. Espone ‘user’ con lo stesso nome usato nel template */
         model.addAttribute("user", user);
+
+        /* 3. Thymeleaf renderizza registrationSuccessful.html */
         return "registrationSuccessful";
     }
-	
+
 	@GetMapping(value = "/login") 
 	public String showLoginForm (Model model) {
 		return "formLogin";

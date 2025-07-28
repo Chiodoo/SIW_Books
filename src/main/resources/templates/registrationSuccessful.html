@@ -3,7 +3,8 @@
 
 <head>
 	<title>SiwMovie - Registrazione conclusa</title>
-	<link rel="stylesheet" href="/css/stile.css" />
+	<link rel="stylesheet" href="/css/base.css" />
+	<link rel="stylesheet" href="/css/account.css" />
 </head>
 
 <body>
@@ -33,5 +34,12 @@
 		<span>Email: </span>
 		<span th:text="${user.email}"></span>
 	</div>
+	<div class="col-md-4 img-section">
+              <img th:src="${user.image != null} 
+                              ? @{/uploads/{f}(f=${user.image.path})} 
+                              : @{/images/default-profile.png}"
+                   alt="Foto profilo"
+                   class="profile-img" />
+            </div>
 </body>
 </html>
