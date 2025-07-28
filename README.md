@@ -83,35 +83,45 @@ classDiagram
   **Descrizione:**  
   L’utente digita il nome o il cognome di un autore, lancia la ricerca e ottiene i dettagli degli autori trovati.
 
+  - **UC3: Ricerca di un autore per nome o cognome**  
+  **Attori:** Ogni tipo di utente  
+  **Descrizione:**  
+  L'utente seleziona la pagina del proprio profilo e decide di cancellarlo, rimuovendo tutti i dati correlati.
+
+  - **UC4: Ricerca di un autore per nome o cognome**  
+  **Attori:** Ogni tipo di utente  
+  **Descrizione:**  
+  L'utente seleziona la pagina del proprio profilo e decide di modificarne le info, gli utenti che hanno acceduto tramite OAuth2 non hanno il permesso di eseguire questa operazione.
+
 ---
 
 ## Admin
-- **UC3: Cancellazione di un utente**  
+- **UC5: Cancellazione di un utente**  
   **Attore principale:** Admin  
   **Descrizione:**  
   L’amministratore seleziona un utente dalla lista, conferma l’eliminazione e il sistema rimuove l’account (e tutti i dati correlati).
 
-- **UC4: Aggiunta di un nuovo libro**  
+- **UC6: Aggiunta di un nuovo libro**  
   **Attore principale:** Admin  
   **Descrizione:**  
-  L’admin compila i campi del libro (titolo, anno, descrizione...), associa uno o più autori esistenti o ne crea di nuovi, carica più immagini e conferma l’inserimento.
+  L’admin compila i campi del libro (titolo, anno), associa uno o più autori esistenti, carica una o più immagini e conferma l’inserimento.
 
-- **UC5: Cancellazione di un libro**  
+- **UC7: Cancellazione di un libro**  
   **Attore principale:** Admin  
   **Descrizione:**  
-  L’admin sceglie un libro dall’elenco, conferma la rimozione e il sistema lo elimina definitivamente (insieme a eventuali recensioni).
+  L’admin sceglie un libro dall’elenco, conferma la rimozione e il sistema lo elimina definitivamente (insieme a eventuali recensioni e alle eventuali immagini presenti sul filesystem).
 
-- **UC6: Aggiunta di un nuovo autore**  
+- **UC8: Aggiunta di un nuovo autore**  
   **Attore principale:** Admin  
   **Descrizione:**  
-  L’admin inserisce nome, cognome e bio dell’autore, può associare alcuni libri già presenti e caricare un’immagine, poi salva.
+  L’admin inserisce nome, cognome e nazionalità dell'autore, può associare alcuni libri già presenti e caricare un’immagine, poi salva.
 
-- **UC7: Cancellazione di un autore**  
+- **UC9: Cancellazione di un autore**  
   **Attore principale:** Admin  
   **Descrizione:**  
-  L’admin seleziona un autore, conferma l’eliminazione e il sistema rimuove l’autore (eventuali libri restano, ma perdono il riferimento).
+  L’admin seleziona un autore, conferma l’eliminazione e il sistema rimuove l’autore (eventuali libri restano, ma perdono il riferimento, l'immagine relativa a quell'autore viene cancellata dal filesystem).
 
-- **UC8: Cancellazione di qualsiasi recensione**  
+- **UC10: Cancellazione di qualsiasi recensione**  
   **Attore principale:** Admin  
   **Descrizione:**  
   L’admin individua una recensione (su un libro), conferma la rimozione e il sistema elimina la recensione.
@@ -119,12 +129,12 @@ classDiagram
 ---
 
 ## Utente registrato
-- **UC9: Aggiunta di una recensione a un libro**  
+- **UC11: Aggiunta di una recensione a un libro**  
   **Attore principale:** Utente registrato  
   **Descrizione:**  
-  L’utente accede alla scheda di un libro, scrive la propria recensione (stella, commento…) e invia. Se ha già recensito quel libro, il sistema non permette un secondo invio.
+  L’utente seleziona per quale libro scrivere la propria recensione composta da titolo voto e testp e invia. Se ha già recensito quel libro, il sistema non permette un secondo invio.
 
-- **UC10: Cancellazione della propria recensione**  
+- **UC12: Cancellazione della propria recensione**  
   **Attore principale:** Utente registrato  
   **Descrizione:**  
   L’utente trova la recensione che ha scritto, clicca “Elimina” e conferma: il sistema rimuove solo la sua recensione.
