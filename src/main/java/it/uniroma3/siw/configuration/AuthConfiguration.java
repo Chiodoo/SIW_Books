@@ -62,6 +62,7 @@ public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception 
                 "/authors/**", // dettagli autore, ricerche, ecc.
                 "/author/**",  // eventuale alias singolare
                 "/registrationSuccessful",
+                "/error",
                 "/uploads/**"
             ).permitAll()
                 // Registrazione e login aperti a tutti (POST)
